@@ -1,5 +1,6 @@
 package com.tzahia.beans;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Customer {
@@ -15,6 +16,13 @@ public class Customer {
 	 */
 	public Customer() {
 	}
+	
+	public Customer(String custName, String password) {
+		this.custName = custName;
+		this.password = password;
+		this.coupons = new ArrayList<Coupon>();
+	}
+	
 	/**
 	 * Constructor with all the variables
 	 * @param custName
