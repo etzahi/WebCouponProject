@@ -7,7 +7,7 @@
 		<!---- define the ADMIN SPA Controller---->
 		<title>Admin</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-		<script type="text/javascript" src="http://localhost:8080/CouponProject/controller/adminController.js"></script>
+		<script type="text/javascript" src="http://localhost:8080/com.tzahia/controller/adminController.js"></script>
 		
 		<!---- design the COMPANY SPA ---->
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -29,7 +29,7 @@
 					<h3><button class="button" ng-click="exit()" ng-model="exitMessage">Leave my page	<i class="fa fa-user-circle-o" style="font-size:30px;"></i></button></h3>
 				</div>
 				
-				<h1 id="pageTitle" >admin page</h1>
+				<h1 id="pageTitle" >Admin page</h1>
 				<h1 ng-show="showWelcomeMessage">Hi Admin, Welcome to your page !</h1>		<!----- welcome message ----->
 				<h1 ng-show="showExitMessage">{{exitMessage}}</h1>							<!----- goodbye message ----->
 				<h2 ng-show="showSQLErrorMessage">{{sqlErrorMessage}}</h2>					<!----- SQL Error Message --->

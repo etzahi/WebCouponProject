@@ -1411,7 +1411,7 @@ var app = angular.module('couponSystem', []);
 		$scope.showWelcomeMessage = false;			// close the welcome message
 		$scope.showExitMessage = true;				// open the goodbye message
 		
-		$timeout (function(){$window.location.href = 'http://localhost:8080/CouponProject/login.html';}, 1500);
+		$timeout (function(){$window.location.href = 'http://localhost:8080/com.tzahia/login.html';}, 1500);
 	};
 });
 

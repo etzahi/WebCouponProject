@@ -39,9 +39,7 @@ public class SessionFilter implements Filter {
     	// if there is no session - return to the Login HTML form if the user name or password are incorrect
     	if (session == null){
 			((HttpServletResponse)response).sendRedirect("login.html");
-    	}
-    	
-    	else{
+    	} else{
     		// else - pass the request along the filter chain
     		chain.doFilter(request, response);
     	}

@@ -30,6 +30,14 @@ public class AdminService {
 	@Context
 	private HttpServletResponse response;
 
+	private AdminFacade getFacade() {
+
+		AdminFacade admin = null;
+		admin = (AdminFacade) request.getSession(true).getAttribute("facade");
+		// admin = new AdminFacade(new CompanyDBDAO(), new CustomerDBDAO());
+		return admin;
+	}
+
 	// create a new company pojo in the db
 	@GET
 	@Path("createCompany")
@@ -78,23 +86,6 @@ public class AdminService {
 		}
 
 		return failMsg;
-	}
-
-	private AdminFacade getFacade() {
-
-		AdminFacade admin = null;
-		try {
-			System.err.println("SHOULD NOT BE CREATED LIKE THIS");
-			admin = new AdminFacade(new CompanyDBDAO(), new CustomerDBDAO());
-			return admin;
-		} catch (DbdaoException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return null;
-
-		// TODO this should work
-		// return (AdminFacade)request.getSession(true).getAttribute("facade");
 	}
 
 	// UPDATE a company
@@ -275,7 +266,7 @@ public class AdminService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("AdminService: FAILED GET ALL CUSTOMERS: there are no customers in the DB table!");
 		return null;
 	}
@@ -302,6 +293,6 @@ public class AdminService {
 				"FAILED GET CUSTOMER BY ID: there is no such id!" + id + " - please enter another customer id");
 
 		return null;
-	}	
+	}
 
 }

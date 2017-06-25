@@ -9,6 +9,7 @@ var app = angular.module('couponSystem', []);
 	//*******************************************************************************************************************************************//
 	//														I N I T     A C T I O N S			 		  		 								 //
 	//*******************************************************************************************************************************************//
+	/*
 	 *********************************
 	 *     INITIALIZE NG-SHOWS 		 * 
 	 *********************************
@@ -490,21 +491,25 @@ var app = angular.module('couponSystem', []);
 		$scope.showEditCompany = true;										// open the Edit Company Window
 		$scope.showAddCompanyForm = true;									// open the Adding a new Company Window
 	};
+	
 	// ADD a new Company to the Companies list
 	$scope.addCompany=function() {
 		
         // putting the company data from the Form into a JSON format
 		var formCompany = {				
-				"compName": $scope.compName,
-				"password": $scope.compPassword,
+				"name": $scope.compName,
+				"pass": $scope.compPassword,
 				"email": $scope.compEmail
 		};
 		
 		// don't show "NULL" or "UNDEFINED" in the show coupon table in the client HTML page
 		formCompany = setObjNullFields(formCompany);
 		
+		
 		// adding the new coupon in the DataBase Tables
-		$http.post("rest/admin/createCompany", formCompany).success(function(response) { $scope.addCompanyConfirm = response;});
+		$http.post("rest/admin/createCompany", formCompany).success(function(response) { 
+			$scope.addCompanyConfirm = response;
+		});
 		
 		$timeout (function(){
 			
@@ -1543,7 +1548,7 @@ var app = angular.module('couponSystem', []);
 		$scope.showWelcomeMessage = false;								// close the welcome message
 		$scope.showExitMessage = true;									// open the goodbye message
 		
-		$timeout (function(){$window.location.href = 'http://localhost:8080/CouponProject/login.html';}, 2000);
+		$timeout (function(){$window.location.href = 'http://localhost:8080/com.tzahia/login.html';}, 2000);
 	};
 });
 
