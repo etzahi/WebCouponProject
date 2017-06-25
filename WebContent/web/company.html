@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!---- define the COMPANY SPA Controller---->
+		<title>Company SPA - AngularJS</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+		<script type="text/javascript" src="http://localhost:8080/CouponProject/controller/companyController.js"></script>
+		
+		<!---- design the COMPANY SPA ---->
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/CouponProject/css/CouponSystemStyle.css">
+	</head>
+	
+	<body>
+	<div ng-app="couponSystem">
+	
+		<div ng-controller="compCtrl">
+		<header>
+			<div class="clearfix">
+			
+				<!----- side Menu: B A C K   B U T T O N S ----->
+				<div ng-show="showHeaderMenu" class="rightMenu">
+					<h3><button class="button" ng-click="backToMainMenu()">Back to Main Menu	<i class="fa fa-home" style="font-size:30px;"></i></button></h3>	 
+					<h3><button class="button" ng-click="exit()" ng-model="exitMessage">Leave my page	<i class="fa fa-user-circle-o" style="font-size:30px;"></i></button></h3>
+				</div>
+				
+				<h1 id="pageTitle" >company page</h1>
+				<h1 ng-show="showWelcomeMessage">Hi {{compName}}, Welcome to your personal page !</h1>		<!----- welcome message ----->
+				<h1 ng-show="showExitMessage">{{exitMessage}}</h1>											<!----- goodbye message ----->
+				<h2 ng-show="showSQLErrorMessage">{{sqlErrorMessage}}</h2>									<!----- SQL Error Message ---->
+				
+			</div>
+			<hr/>
+		</header>
+			
+		<section>
+		
+			<!--******************************************************************************************************************-->
+			<!--*												 M A I N    M E N U  											 *-->
+			<!--******************************************************************************************************************-->
+								
+			<div name="div0" id="mainMenu" ng-show="showMainMenu">
+				<h1>Main Menu</h1>
+				<h2><button id="btn0_1" class="button" ng-click="showCoupons()">Show My Coupons		<i class="fa fa-binoculars" style="font-size:30px;"></i></button></h2>
+				<h2><button id="btn0_2" class="button" ng-click="createCoupon()">Add a New Coupon	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button></h2>
+				<h2><button id="btn0_3" class="button" ng-click="exit()" ng-model="exitMessage">Leave my page	
+				<i class="fa fa-user-circle-o" style="font-size:30px;"></i></button></h2>
+			</div>
+			
+			<!--******************************************************************************************************************-->
+			<!--*							 Button 1 :  S H O W    C O M P A N Y    C O U P O N S  							 *-->
+			<!--******************************************************************************************************************-->			
+			
+			<!--------Show Company's coupons TITLE  ------->
+			<div name="div1" ng-show="showCompCoupons" class="mainDiv">
+				<div name="div1_1" class="clearfix">
+					<h2 id="divTitle">My Coupons	<i class="fa fa-gift" style="font-size:35px;"></i></h2>
+				
+					<!----- side Menu: B A C K   B U T T O N S ----->
+					<div name="div1_1_1" class="rightMenu">
+						<h3><button class="button" ng-click="createCoupon()">Add a new Coupon	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button></h3>	 
+					</div>
+					
+					<!-------- Error Message  ------->
+					<br/>
+					<div name="div1_1_2_message" ng-show="showNoCouponsErrorMessage" class="message">{{noCouponsErrorMessage}}</div>
+					
+					<!------ Company's coupons MENU for choosing the way to see them ------->
+					<div name="div1_1_2" ng-show="showCompCouponsMenu">
+					<h3>Choose the way you want to see your Coupons:</h3>
+						
+						<!-------- show ALL Company Coupons  ------->
+						<ul>
+							<li>
+								<input type="checkbox" ng-model="compCoupons" ng-change="getAllCompCoupons()"/>
+								All
+							</li>
+							<div name="div1_1_2_1_message" ng-show="showAllCouponsErrorMessage" class="message">{{noCouponsErrorMessage}}</div>
+							<div name="div1_1_2_1" ng-show="showAllCoupons" style="overflow-x: auto;">
+								<table>
+									<tr>
+										<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+											</span></a>
+	           							</th>
+										<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+		            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+	            							</span></a>
+										</th>
+										<th>Message</th>
+										<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th id="image">Image</th>
+										<th id="td_center">Update</th>
+										<th id="td_center">Remove</th>
+									</tr>
+									<tr class="row" ng-repeat="x in compCoupons | orderBy:sort.type:sort.reverse">
+										<td>{{ x.id }}</td>
+										<td>{{ x.type }}</td>
+										<td>{{ x.price }}</td>
+										<td>{{ x.startDate | date: "d.M.yy" }}</td>
+										<td>{{ x.endDate | date: "d.M.yy"}}</td>
+										<td>{{ x.title }}</td>
+										<td>{{ x.message }}</td>
+										<td id="td_center">{{ x.amount }}</td>
+										<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{compName}}'s Coupon Image"/></td>
+										<td id="td_center">
+											<button  class="tableButton" ng-click="openUpdateForm(x.id)"><i class="fa fa-pencil-square-o" style="font-size:16px;"></i></button>
+										</td>
+										<td id="td_center">
+											<button  class="tableButton" ng-click="removeCoupon(x.id)"><i class="fa fa-trash" style="font-size:16px;"></i></button>
+										</td>
+									</tr>
+								</table>
+							</div>
+								
+							<!------ show a coupon by its Title  ------->
+							<li>
+								<input type="checkbox" ng-model="couponTitleList" ng-change="getCompCouponTitleList()"/>
+								By Title
+							</li>
+							<div name="div1_1_2_2_message" ng-show="showByNameErrorMessage" class="message">{{noCouponsErrorMessage}}</div>
+							
+							<!------ show an TITLE LIST of all the company's coupons  ------->
+							<div name="div1_1_2_2" ng-show="showCouponTitleList">
+								<select ng-model="selectedCouponTitle" ng-change="getCompCouponByTitle()" >
+									<option value="">---Please select---</option> 					<!-- not selected / blank option -->
+									<option ng-repeat="x in compCoupons">{{x.title}}</option>
+								</select>
+							</div>
+							
+							<!------ show the coupon of the selected TITLE  ------>
+							<div name="div1_1_2_3" ng-show="showCompCouponByTitle" style="overflow-x: auto;">
+								<table>
+									<tr>
+										<th>ID</th>
+										<th>Type</th>
+										<th>Title</th>
+										<th>Message</th>
+										<th>Price</th>
+										<th>Start Date</th>
+										<th>Expire Date</th>
+										<th id="td_center">Amount</th>
+										<th id="image">Image</th>
+										<th id="td_center">Update</th>
+										<th id="td_center">Remove</th>
+									</tr>
+									<tr class="row">
+										<td>{{ compCoupon.id }}</td>
+										<td>{{ compCoupon.type }}</td>
+										<td>{{ compCoupon.title }}</td>
+										<td>{{ compCoupon.message }}</td>
+										<td>{{ compCoupon.price }}</td>
+										<td>{{ compCoupon.startDate | date: "d.M.yy" }}</td>
+										<td>{{ compCoupon.endDate | date: "d.M.yy"}}</td>
+										<td id="td_center">{{ compCoupon.amount }}</td>
+										<td id="image"><img ng-if="!!compCoupon.image" ng-src="{{compCoupon.image}}" alt="{{compName}}'s Coupon Image"></td>
+										<td id="td_center"><button ng-click="openUpdateForm(compCoupon.id)"><i class="fa fa-pencil-square-o" style="font-size:16px;"></i></button></td>
+										<td id="td_center"><button ng-click="removeCoupon(compCoupon.id)"><i class="fa fa-trash" style="font-size:16px;"></i></button></td>
+									</tr>
+								</table>
+							</div>
+							
+							<!------ show all company's coupons of the selected PRICE RANGE  ------->
+							<li>
+								<input type="checkbox" ng-model="pricesList" ng-change="getPricesList()"/>
+								By Price range
+							</li>
+							<div name="div1_1_2_4_message" ng-show="showByPriceErrorMessage" class="message">{{noCouponsErrorMessage}}</div>
+							<div name="div1_1_2_4" ng-show="showCouponPrices">
+							
+								<!------ show a PRICE RANGE LIST of all the purchased coupons  ------->
+								<span name="div1_1_2_4_1" ng-show="showPriceList">
+									<select ng-model="selectedPrice" ng-change="getCompCouponsByPrice()" >
+										<option value="">---Please select---</option> 					<!-- not selected / blank option -->
+										<option ng-repeat="x in priceList" value="{{x.max}}">{{x.min}} - {{x.max}}</option>
+									</select>
+								</span>
+								
+								<!------ show the coupons of the selected PRICE RANGE  ------>
+								<div name="div1_1_2_4_2_message" ng-show="showListByPriceErrorMessage" class="message">{{noCouponsErrorMessage}} of such PRICE Range, please choose another price range</div>
+								<div name="div1_1_2_4_2" ng-show="showCompCouponByPrice" style="overflow-x: auto;">
+									<table>
+										<tr>
+											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+		           							</th>
+											<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+			            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+		            							</span></a>
+											</th>
+											<th>Message</th>
+											<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+												<th id="image">Image</th>
+											<th id="td_center">Update</th>
+											<th id="td_center">Remove</th>
+										</tr>
+										<tr class="row" ng-repeat="x in couponsByPrice | orderBy:sort.type:sort.reverse">
+											<td>{{ x.id }}</td>
+											<td>{{ x.price }}</td>
+											<td>{{ x.type }}</td>
+											<td>{{ x.startDate | date: "d.M.yy" }}</td>
+											<td>{{ x.endDate | date: "d.M.yy"}}</td>
+											<td>{{ x.title }}</td>
+											<td>{{ x.message }}</td>
+											<td id="td_center">{{ x.amount }}</td>
+											<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{compName}}'s Coupon Image"/></td>
+											<td id="td_center">
+												<button  class="tableButton" ng-click="openUpdateForm(x.id)"><i class="fa fa-pencil-square-o" style="font-size:16px;"></i></button>
+											</td>
+											<td id="td_center">
+												<button  class="tableButton" ng-click="removeCoupon(x.id)"><i class="fa fa-trash" style="font-size:16px;"></i></button>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							
+							<!------ show all company's coupons of the selected END DATE  ------->
+							<li>
+								<input type="checkbox" ng-model="selectByDate" ng-change="openDatePicker()"/>
+								By Expire Date
+							</li>
+							<div name="div1_1_2_5_message" ng-show="showByDateErrorMessage" class="message">{{noCouponsErrorMessage}}</div>
+							<div name="div1_1_2_5" ng-show="showCouponDates">
+							
+								<!------ open the DATE PICKER diary to select an END DATE  ------->
+								<span name="div1_1_2_5_1" ng-show="showDatePicker">
+								Pick the Maximum Expired Date of the coupons:
+									<input type="date" ng-model="inputDate" ng-value="{{today}}" ng-change="getCompCouponsByDate()"/>
+								</span>
+								
+								<!------ show the coupons of the selected END DATE ------>
+								<div name="div1_1_2_5_2_message" ng-show="showListByDateErrorMessage" class="message"><b>{{noCouponsErrorMessage}} of that DATE, please choose another date</b></div>
+								<div name="div1_1_2_5_2" ng-show="showCompCouponByDate" style="overflow-x: auto;">
+									<table>
+										<tr>
+											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+		           							</th>
+											<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+			            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+		            							</span></a>
+											</th>
+											<th>Message</th>
+											<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+												<th id="image">Image</th>
+											<th id="td_center">Update</th>
+											<th id="td_center">Remove</th>
+										</tr>
+										<tr class="row" ng-repeat="x in couponsByDate | orderBy:sort.type:sort.reverse">
+											<td>{{ x.id }}</td>
+											<td>{{ x.endDate | date: "d.M.yy"}}</td>
+											<td>{{ x.startDate | date: "d.M.yy" }}</td>
+											<td>{{ x.type }}</td>
+											<td>{{ x.price }}</td>
+											<td>{{ x.title }}</td>
+											<td>{{ x.message }}</td>
+											<td id="td_center">{{ x.amount }}</td>
+											<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{compName}}'s Coupon Image"/></td>
+											<td id="td_center">
+												<button  class="tableButton" ng-click="openUpdateForm(x.id)"><i class="fa fa-pencil-square-o" style="font-size:16px;"></i></button>
+											</td>
+											<td id="td_center">
+												<button  class="tableButton" ng-click="removeCoupon(x.id)"><i class="fa fa-trash" style="font-size:16px;"></i></button>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</ul>
+						<div ng-show="showRemoveConfirmMessage" class="message"> {{removeMessage}} </div>	<!-- a Remove Coupon confirm message -->
+						
+						<!----- R E F R E S H    M E N U  ----->
+						<h2><button class="button" ng-click="refresh()">Refresh	<i class="fa fa-refresh" style="font-size:30px;"></i></button>
+							<button class="button" ng-click="closeShowCoupons()">Close selections 		<i class="fa fa-close" style="font-size:30px;"></i></button>
+						</h2>
+					</div>
+					<hr/>
+				</div>
+			</div>
+			
+			<!--******************************************************************************************************************-->
+			<!--*									E D I T   C O U P O N   W I N D O W  										 *-->
+			<!--******************************************************************************************************************-->
+			
+			<!-------- edit Coupon TITLE  ------->
+			<div name="div2" ng-show="showEditCoupon" class="mainDiv">
+				<h2 id="divTitle">Edit Coupons	<i class="fa fa-edit" style="font-size:35px;"></i></h2>
+						
+				<!------- Button 2 :  A D D    A    N E W   C O U P O N  ------->
+					
+				<div name="div2_1" ng-show="showAddCouponForm">
+					<form name="addCouponForm" novalidate>
+						<h3>Please fill the new Coupon Details:</h3>
+						<fieldset>
+	  						<legend><h4>Create a Coupon:</h4></legend>
+								<p>	<span ng-class="!addCouponForm.title.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
+									<label for="title">The Coupon's Title</label>
+									<input type="text" name="title" required ng-model="title" placeholder="Enter the Title..."/>
+								</p>
+								
+								<p>	<span ng-class="!addCouponForm.type.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
+									<label for="type">Choose the Coupon's Type:</label>
+									<select id="type" name="type" required ng-model="selectedCouponType">
+										<option value="">---Please select---</option> 					<!-- not selected / blank option -->
+										<option ng-repeat="x in typesList" >{{x}}</option>
+									</select>
+								</p>
+								<p>	<span ng-class="!addCouponForm.price.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
+									<label for="price">The Coupon's Price</label>
+									<input type="number" name="price" min="1" required ng-model="price" placeholder="price(NIS)...">
+									<span class="smallComment" ng-hide="addCouponForm.price.$valid" 
+										  ng-if="addCouponForm.price.$valid == false && addCouponForm.price.$dirty == true">
+										  only numbers are allowed!</span>
+								</p>
+								<p>	<span ng-class="!addCouponForm.amount.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
+									<label for="amount">The Amount of all these coupons</label>
+									<input type="number" name="amount" min="1" required ng-model="amount" placeholder="Enter the Amount...">
+									<span class="smallComment" ng-hide="addCouponForm.amount.$valid" 
+										  ng-if="addCouponForm.amount.$valid == false && addCouponForm.amount.$dirty == true">
+										  only numbers are allowed!</span>
+								</p>
+								<p>	<span ng-class="!addCouponForm.sdate.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
+									<label for="startDate">Enter the Start Date of the coupon</label>
+									<input type="date" name="sdate" required ng-model="startDate" min="{{today}}" placeholder="choose the start date"/>
+									<span class="smallComment" ng-hide="addCouponForm.sdate.$valid" 
+										  ng-if="addCouponForm.sdate.$valid == false && addCouponForm.sdate.$dirty == true">
+										  you must give a date that is today or later then today!</span>
+								</p>
+								<p ng-show="addCouponForm.sdate.$valid">
+									<span ng-class="!addCouponForm.edate.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
+										<label for="endDate">Enter the Expired Date of the coupon</label>
+										<input type="date" name="edate" min="{{startDate}}" required ng-model="endDate" placeholder="choose the expired date"/>
+										<span class="smallComment" ng-hide="addCouponForm.edate.$valid" 
+											  ng-if="addCouponForm.edate.$valid == false && addCouponForm.edate.$dirty == true">
+											  you must give a date that is later them the start date!</span>
+								</p>
+								<p>
+									<span class="hiddenStar">*</span>
+									<label for="message">Enter here a Short Message about the coupon:</label></p>	
+									<textarea rows="3" cols="50" id="couponMessage" ng-model="message" 
+											  placeholder="Enter here a short Message for the customers..."></textarea>
+								<p>
+									<span class="hiddenStar">*</span>
+									<label for="image">Insert an Image</label>
+									<input type="file" id="imgName" accept="image/*" ng-model="image" onchange="angular.element(this).scope().uploadImage()"/>
+									<img ng-if="!!image" ng-src="{{image}}" alt="{{compName}}'s Coupon Image" style="width:10%; height:10%;">
+								</p>
+						</fieldset>
+						
+						<!-- open the CONFIRM window to see if the company succeed to add a coupon or not -->
+						<div name="div2_1_1_message" ng-show="showAddConfirmMessage" class="message"> {{messageConfirm}} </div>
+						
+						<h2><button type="submit" ng-class="addCouponForm.$valid ?'button':'disableButton'" ng-click="addCoupon()">
+							ADD COUPON	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button>
+							<button type="reset"  class="button" ng-click="resetForm('addCouponForm')">
+							RESET	<i class="fa fa-eraser" style="font-size:30px;"></i></button>
+							<button class="button" ng-click="showCoupons()">Close 	<i class="fa fa-close" style="font-size:30px;"></i></button>
+						</h2>
+					</form>
+				</div>
+			
+				<!------- U P D A T E   C O U P O N  F O R M ------->
+				
+				<div name="div2_2" ng-show="showUpdateForm">
+					<form name="updateCouponForm" novalidate>
+						<h4>You may EDIT the PRICE or the EXPIRED DATE of the selected Coupon:</h4>
+						<fieldset>
+	  						<legend><h4>Update Coupon: {{newCoupon.title}}</h4></legend>
+	  							<p> the ID of the coupon is: <i style="color: blue;"> {{newCoupon.id}}</i></p>
+								<p> the Start Date of the coupon is: <i style="color: blue;"> {{newCoupon.startDate | date: "d.M.yy"  }}</i></p>
+								<p> the end Date of the coupon is: <i style="color: blue;"> {{newCoupon.endDate | date: "d.M.yy" }}</i></p>
+								<p>	
+									<label for="price">The Coupon's Price</label>
+									<input type="number" name="newPrice" min="1" ng-model="newPrice" placeholder="{{newCoupon.price}}">
+									<span class="smallComment" ng-hide="upadteCouponForm.price.$valid" 
+											  ng-if="updateCouponForm.price.$valid == false && updateCouponForm.price.$dirty == true">
+											  only numbers are allowed!</span>
+								</p>
+								<p>
+									<label for="endDate">Enter the Expired Date of the coupon</label>
+									<input type="date" name="edate" min="{{newCoupon.startDate}}" ng-model="newEndDate" placeholder="{{newCoupon.endDate}}"/>
+									<span class="smallComment" ng-hide="updateCouponForm.edate.$valid" 
+										  ng-if="updateCouponForm.edate.$valid == false && updateCouponForm.edate.$dirty == true">
+										  you must give a date that is later them the start date!</span>
+								</p>
+						</fieldset>
+							
+						<!-- open the CONFIRM window to see if the company succeed to update the coupon or not -->
+						<div name="div2_2_1_message" ng-show="showUpdateConfirmMessage" class="message"> {{updateMessage}} </div>
+						
+						<h2><button type="submit" ng-class="updateCouponForm.$valid ?'button':'disableButton'" ng-click="updateCoupon()">
+							UPDATE COUPON	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button>
+							<button type="reset"  class="button" ng-click="resetForm('updateCouponForm')">
+							RESET	<i class="fa fa-eraser" style="font-size:30px;"></i></button>
+							<button class="button" ng-click="showCoupons()">Close 	<i class="fa fa-close" style="font-size:30px;"></i></button>
+						</h2>
+					</form>
+				</div>
+				<hr/>
+			</div>
+			
+		</section>
+		</div>
+	</div>
+	</body>
+</html>

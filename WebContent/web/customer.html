@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!---- define the CUSTOMER SPA Controller---->
+		<title>Customer SPA - AngularJS</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+		<script type="text/javascript" src="http://localhost:8080/CouponProject/controller/customerController.js"></script>
+		
+		<!---- design the CUSTOMER SPA ---->
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/CouponProject/css/CouponSystemStyle.css">
+	</head>
+	
+	<body>
+	<div ng-app="couponSystem">
+	
+		<div ng-controller="custCtrl">
+		<header>
+			<div class="clearfix">
+			
+				<!----- side Menu: B A C K   B U T T O N S ----->
+				<div ng-show="showHeaderMenu" class="rightMenu">
+					<h3><button class="button" ng-click="backToMainMenu()">Back to Main Menu	<i class="fa fa-home" style="font-size:30px;"></i></button></h3>	 
+					<h3><button class="button" ng-click="exit()" ng-model="exitMessage">Leave my page	<i class="fa fa-user-circle-o" style="font-size:30px;"></i></button></h3>
+				</div>
+				
+				<h1 id="pageTitle" >customer page</h1>
+				<h1 ng-show="showWelcomeMessage">Hi {{custName}}, Welcome to your personal page !</h1>		<!----- welcome message ----->
+				<h1 ng-show="showExitMessage">{{exitMessage}}</h1>											<!----- goodbye message ----->
+				<h2 ng-show="showSQLErrorMessage">{{sqlErrorMessage}}</h2>									<!----- SQL Error Message --->
+				
+			</div>
+			<hr/>
+		</header>
+			
+		<section>
+		
+			<!--******************************************************************************************************************-->
+			<!--*												 M A I N    M E N U  											 *-->
+			<!--******************************************************************************************************************-->
+			
+			<div name="div0" id="mainMenu" ng-show="showMainMenu">
+				<h1>Main Menu</h1>
+				<h2><button id="btn0_1" class="button" ng-click="showCustCoupons()">Show My Coupons		<i class="fa fa-binoculars" style="font-size:30px;"></i></button></h2>
+				<h2><button id="btn0_2" class="button" ng-click="buyCoupons()">Buy New Coupons			<i class="fa fa-cart-plus" style="font-size:30px;"></i></button></h2>
+				<h2><button id="btn0_3" class="button" ng-click="exit()" ng-model="exitMessage">Leave my page	
+				<i class="fa fa-user-circle-o" style="font-size:30px;"></i></button></h2>
+			</div>
+			
+			<!--******************************************************************************************************************-->
+			<!--*		 	     Button 1 :  S H O W    C U S T O M E R' S    P U R C H A S E D     C O U P O N S  				 *-->
+			<!--******************************************************************************************************************-->			
+			
+			<!--------Show Company's purchased coupons TITLE  ------->
+			<div name="div1" ng-show="showPurchasedCoupons" class="mainDiv">
+				<div name="div1_1" class="clearfix">
+					<h3 id="divTitle">My Coupons	<i class="fa fa-shopping-cart" style="font-size:35px;"></i></h3>
+				
+					<!----- side Menu: B A C K   B U T T O N S ----->
+					<div name="div1_1_1" class="rightMenu">
+						<h3><button class="button" ng-click="buyCoupons()">Buy New Coupons	<i class="fa fa-cart-plus" style="font-size:30px;"></i></button></h3>	 
+					</div>
+					
+					<!-------- Error Message  ------->
+					<br/>
+					<div name="div1_1_2_message" ng-show="showPurchasedErrorMessage" class="message">{{purchasedErrorMessage}}</div>
+					
+					<!------ PURCHASED coupons MENU for choosing the way to see them ------->
+					<div name="div1_1_2" ng-show="showPurchasedCouponsMenu">
+					<h3>Choose the way you want to see your Coupons:</h3>
+						
+						<!-------- show ALL purchased coupons  ------->
+						<ul>
+							<li>
+								<input type="checkbox" ng-model="custCoupons" ng-change="getAllCustCoupons()"/>
+								All
+							</li>
+							<div name="div1_1_2_1_message" ng-show="showAllPurchasedErrorMessage" class="message">{{purchasedErrorMessage}}</div>
+							<div name="div1_1_2_1" ng-show="showAllPurchasedCoupons" style="overflow-x: auto;">
+								<table>
+									<tr>
+										<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+	           							</th>
+										<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+		            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+	            							</span></a>
+										</th>
+										<th>Message</th>
+										<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th id="image">Image</th>
+									</tr>
+									<tr ng-repeat="x in custCoupons | orderBy:sort.type:sort.reverse" >
+										<td>{{ x.id }}</td>
+										<td>{{ x.type }}</td>
+										<td>{{ x.price }}</td>
+										<td>{{ x.startDate | date: "d.M.yy" }}</td>
+										<td>{{ x.endDate | date: "d.M.yy"}}</td>
+										<td>{{ x.title }}</td>
+										<td>{{ x.message }}</td>
+										<td id="td_center">{{ x.amount }}</td>
+										<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image"/></td>
+									</tr>
+								</table>
+							</div>
+								
+							<!------ show a purchased coupon by its TITLE  ------->
+							<li>
+								<input type="checkbox" ng-model="custCouponTitleList" ng-change="getCustCouponTitleList()"/>
+								By Title
+							</li>
+							<div name="div1_1_2_2_message" ng-show="showByTitlePurchasedErrorMessage" class="message">{{purchasedErrorMessage}}</div>
+							
+							<!------ show an TITLE LIST of all the purchased coupons  ------->
+							<div name="div1_1_2_2" ng-show="showPurchasedCouponTitleList">
+								<select ng-model="selectedCouponTitle" ng-change="getCustCouponByTitle()" >
+									<option value="">---Please select---</option> 					<!-- not selected / blank option -->
+									<option ng-repeat="x in custCoupons">{{x.title}}</option>
+								</select>
+							</div>
+							
+							<!------ show the coupon of the selected TITLE  ------>
+							<div name="div1_1_2_3" ng-show="showCustCouponByTitle" style="overflow-x: auto;">
+								<table>
+									<tr>
+										<th>ID</th>
+										<th>Type</th>
+										<th>Title</th>
+										<th>Message</th>
+										<th>Price</th>
+										<th>Start Date</th>
+										<th>Expire Date</th>
+										<th id="td_center">Amount</th>
+										<th id="image">Image</th>
+									</tr>
+									<tr>
+										<td>{{ custCoupon.id }}</td>
+										<td>{{ custCoupon.type }}</td>
+										<td>{{ custCoupon.title }}</td>
+										<td>{{ custCoupon.message }}</td>
+										<td>{{ custCoupon.price }}</td>
+										<td>{{ custCoupon.startDate | date: "d.M.yy" }}</td>
+										<td>{{ custCoupon.endDate | date: "d.M.yy"}}</td>
+										<td id="td_center">{{ compCoupon.amount }}</td>
+										<td id="image"><img ng-if="!!custCoupon.image" ng-src="{{custCoupon.image}}" alt="{{custName}}'s Coupon Image"></td>
+									</tr>
+								</table>
+							</div>
+									
+							<!------ show all purchased coupons of the selected TYPE  ------->
+							<li>
+								<input type="checkbox" ng-model="custCouponTypes" ng-change="getCustCouponTypesList()"/>
+								By Type
+							</li>
+							<div name="div1_1_2_4_message" ng-show="showByTypePurchasedErrorMessage" class="message">{{purchasedErrorMessage}}</div>
+							<div name="div1_1_2_4" ng-show="showCustCouponTypes">
+							
+								<!------ show a coupon TYPE LIST of all the purchased coupons  ------->
+								<span name="div1_1_2_4_1" ng-show="showPurchasedCouponTypeList">
+									<select ng-model="selectedType" ng-change="getCustCouponsByType()" >
+										<option value="">---Please select---</option> 					<!-- not selected / blank option -->
+										<option ng-repeat="x in custCouponTypes">{{x}}</option>
+									</select>
+								</span>
+								
+								<!------ show the coupons of the selected TYPE  ------>
+		 						<div name="div1_1_2_4_2" ng-show="showCustCouponByType" style="overflow-x: auto;">
+									<table> 
+										<tr>
+											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+		           							</th>
+											<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+			            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+		            							</span></a>
+											</th>
+											<th>Message</th>
+											<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th id="image">Image</th>
+										</tr>
+										<tr ng-repeat="x in purchasedByType | orderBy:sort.type:sort.reverse">
+											<td>{{ x.id }}</td>
+											<td>{{ x.type }}</td>
+											<td>{{ x.price }}</td>
+											<td>{{ x.startDate | date: "d.M.yy" }}</td>
+											<td>{{ x.endDate | date: "d.M.yy"}}</td>
+											<td>{{ x.title }}</td>
+											<td>{{ x.message }}</td>
+											<td id="td_center">{{ x.amount }}</td>
+											<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image"/></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							
+							<!------ show all purchased coupons of the selected PRICE RANGE  ------->
+							<li>
+								<input type="checkbox" ng-model="pricesList" ng-change="getPricesList()"/>
+								By Price range
+							</li>
+							<div name="div1_1_2_5_message" ng-show="showByPricePurchasedErrorMessage" class="message">{{purchasedErrorMessage}}</div>
+							<div name="div1_1_2_5" ng-show="showCustCouponPrices">
+							
+								<!------ show a PRICE RANGE LIST of all the purchased coupons  ------->
+								<span name="div1_1_2_5_1" ng-show="showPriceList">
+									<select ng-model="selectedPrice" ng-change="getCustCouponsByPrice()" >
+										<option value="">---Please select---</option> 					<!-- not selected / blank option -->
+										<option ng-repeat="x in priceList" value="{{x.max}}">{{x.min}} - {{x.max}}</option>
+									</select>
+								</span>
+								
+								<!------ show the coupons of the selected PRICE RANGE  ------>
+								<div name="div1_1_2_5_2_message" ng-show="showPurchasedListByPriceErrorMessage" class="message">
+								{{purchasedErrorMessage}} of such PRICE Range, please choose another price range</div>
+								<div name="div1_1_2_5_2" ng-show="showCustCouponByPrice" style="overflow-x: auto;">
+									<table> 
+										<tr>
+											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+		           							</th>
+											<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+			            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+		            							</span></a>
+											</th>
+											<th>Message</th>
+											<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th id="image">Image</th>
+										</tr>
+										<tr ng-repeat="x in purchasedByPrice | orderBy:sort.type:sort.reverse">
+											<td>{{ x.id }}</td>
+											<td>{{ x.price }}</td>
+											<td>{{ x.type }}</td>
+											<td>{{ x.startDate | date: "d.M.yy" }}</td>
+											<td>{{ x.endDate | date: "d.M.yy"}}</td>
+											<td>{{ x.title }}</td>
+											<td>{{ x.message }}</td>
+											<td id="td_center">{{ x.amount }}</td>
+											<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image"/></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</ul>
+							
+						<!----- R E F R E S H    M E N U  ----->
+						<h2><button class="button" ng-click="refreshPurchased()">Refresh	<i class="fa fa-refresh" style="font-size:30px;"></i></button>
+							<button class="button" ng-click="closePurchasedMenu()">Close all selections		<i class="fa fa-close" style="font-size:30px;"></i></button>
+						</h2>
+					</div>
+					<hr/>
+				</div>
+			</div>
+			
+			<!--******************************************************************************************************************-->
+			<!--*									Button 2:  B U Y   N E W   C O U P O N S  									 *-->
+			<!--******************************************************************************************************************-->
+			
+			<!-------- buy Coupons TITLE  ------->
+			<div name="div2" ng-show="showBuyCoupons" class="mainDiv">
+				<div name="div2_1" class="clearfix">
+					<h3 id="divTitle">Buy New Coupons	<i class="fa fa-cart-plus" style="font-size:35px;"></i></h3>
+				
+					<!----- side Menu: B A C K   B U T T O N S ----->
+					<div name="div2_1_1" class="rightMenu">
+						<h3><button class="button" ng-click="showCustCoupons()">Show My Coupons	<i class="fa fa-binoculars" style="font-size:30px;"></i></button></h3>	 
+					</div>
+					
+					<!-------- Error Message  ------->
+					<br/>
+					<div name="div2_1_2_message" ng-show="showNotPurchasedErrorMessage" class="message">{{notPurchasedErrorMessage}}</div>
+					
+					<!------ open the NOT-PURCHASED coupons MENU for choosing which one to buy ----->
+					<div name="div2_1_2" ng-show="showNotPurchasedCouponsMenu">
+						<h3>Choose the way you want to see the Coupons that you want to buy<br/>
+							and then click on the coupon's row for purchase that coupon:</h3>
+						
+						<!------ show ALL not-purchased coupons  ------->
+						<ul>
+							<li>
+								<input type="checkbox" ng-model="otherCoupons" ng-change="getAllOtherCoupons()"/>
+								All
+							</li>
+							<div name="div2_1_2_1_message" ng-show="showBuyErrorMessage" class="message">{{notPurchasedErrorMessage}}</div>
+							<div name="div2_1_2_1" ng-show="showNotPurchasedCoupons" style="overflow-x: auto;">
+								<table>
+									<tr>
+										<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+	           							</th>
+										<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+		            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+	            							</span></a>
+										</th>
+										<th>Message</th>
+										<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+										</th>
+										<th id="image">Image</th>
+									</tr>
+									<tr class="row" style="cursor: pointer;" ng-repeat="x in otherCoupons | orderBy:sortType:sortReverse" ng-click="purchase(x.id)">
+										<td>{{ x.id }}</td>
+										<td>{{ x.type }}</td>
+										<td>{{ x.price }}</td>
+										<td>{{ x.startDate | date: "d.M.yy" }}</td>
+										<td>{{ x.endDate | date: "d.M.yy"}}</td>
+										<td>{{ x.title }}</td>
+										<td>{{ x.message }}</td>
+										<td id="td_center">{{ x.amount }}</td>
+										<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image"/></td>
+									</tr>
+								</table>
+								<!-- a purchase coupon confirm message -->
+								<div name="div2_1_2_1_1_message" ng-show="showPurchaseMessage" class="message">	{{purchaseMessage}}	</div>	
+							</div>
+									
+							<!------ show all NOT-purchased coupons of the selected TYPE  ------->
+							<li>
+								<input type="checkbox" ng-model="otherCouponTypes" ng-change="getOtherCouponTypesList()"/>
+								By Type
+							</li>
+							<div name="div2_1_2_2_message" ng-show="showBuyByTypeErrorMessage" class="message">{{notPurchasedErrorMessage}}</div>
+							<div name="div2_1_2_2" ng-show="showOtherCouponTypes">
+							
+								<!------ show a coupon TYPE LIST of all the purchased coupons  ------->
+								<span name="div2_1_2_2_1" ng-show="showNotPurchasedCouponTypeList">
+									<select ng-model="selectedType" ng-change="getOtherCouponsByType()" >
+										<option value="">---Please select---</option> 					<!-- not selected / blank option -->
+										<option ng-repeat="x in otherCouponTypes">{{x}}</option>
+									</select>
+								</span>
+								
+								<!------ show the coupons of the selected TYPE  ------>
+		 						<div name="div2_1_2_2_2" ng-show="showOtherCouponByType" style="overflow-x: auto;">
+									<table> 
+										<tr>
+											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+		           							</th>
+											<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+			            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+		            							</span></a>
+											</th>
+											<th>Message</th>
+											<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th id="image">Image</th>
+										</tr>
+										<tr class="row" style="cursor: pointer;" ng-repeat="x in notPurchasedByType | orderBy:sortType:sortReverse" ng-click="purchase(x.id)">
+											<td>{{ x.id }}</td>
+											<td>{{ x.type }}</td>
+											<td>{{ x.price }}</td>
+											<td>{{ x.startDate | date: "d.M.yy" }}</td>
+											<td>{{ x.endDate | date: "d.M.yy"}}</td>
+											<td>{{ x.title }}</td>
+											<td>{{ x.message }}</td>
+											<td id="td_center">{{ x.amount }}</td>
+											<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image"/></td>
+										</tr>
+									</table>
+									<!-- a purchase coupon confirm message -->
+									<div name="div2_1_2_2_2_1_message" ng-show="showPurchaseMessage" class="message">	{{purchaseMessage}}	</div>
+								</div>
+							</div>
+							
+							<!------ show all NOT-purchased coupons of the selected PRICE RANGE  ------->
+							<li>
+								<input type="checkbox" ng-model="otherPricesList" ng-change="getOtherPricesList()"/>
+								By Price range
+							</li>
+							<div name="div2_1_2_3_message" ng-show="showBuyByPriceErrorMessage" class="message">{{notPurchasedErrorMessage}}</div>
+							<div name="div2_1_2_3" ng-show="showOtherCouponPrices">
+							
+								<!------ show a PRICE RANGE LIST of all the NOT-purchased coupons  ------->
+								<span name="div2_1_2_2_1" ng-show="showOtherPriceList">
+									<select ng-model="selectedPrice" ng-change="getOtherCouponsByPrice()" >
+										<option value="">---Please select---</option> 					<!-- not selected / blank option -->
+										<option ng-repeat="x in otherPriceList" value="{{x.max}}">{{x.min}} - {{x.max}}</option>
+									</select>
+								</span>
+								
+								<!------ show the coupons of the selected PRICE RANGE  ------>
+								<div name="div2_1_2_2_2_message" ng-show="showBuyListByPriceErrorMessage" class="message"><b>{{notPurchasedErrorMessage}} of such PRICE Range, please choose another price range</b></div>
+								<div name="div2_1_2_2_2" ng-show="showOtherCouponByPrice" style="overflow-x: auto;">
+									<table> 
+										<tr>
+											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+		           							</th>
+											<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+			            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+		            							</span></a>
+											</th>
+											<th>Message</th>
+											<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th id="image">Image</th>
+										</tr>
+										<tr class="row" style="cursor: pointer;" ng-repeat="x in notPurchasedByPrice | orderBy:sortType:sortReverse" ng-click="purchase(x.id)">
+											<td>{{ x.id }}</td>
+											<td>{{ x.price }}</td>
+											<td>{{ x.type }}</td>
+											<td>{{ x.startDate | date: "d.M.yy" }}</td>
+											<td>{{ x.endDate | date: "d.M.yy"}}</td>
+											<td>{{ x.title }}</td>
+											<td>{{ x.message }}</td>
+											<td id="td_center">{{ x.amount }}</td>
+											<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image"/></td>
+										</tr>
+									</table>
+									<!-- a purchase coupon confirm message -->
+									<div name="div2_1_2_2_2_1_message" ng-show="showPurchaseMessage" class="message">	{{purchaseMessage}}	</div>
+								</div>
+							</div>
+								
+							<!------ show all NOT-purchased coupons of the selected END DATE  ------->
+							<li>
+								<input type="checkbox" ng-model="selectByDate" ng-change="openDatePicker()"/>
+								By Expire Date
+							</li>
+							<div name="div2_1_2_4_message" ng-show="showBuyByDateErrorMessage" class="message">{{notPurchasedErrorMessage}}</div>
+							<div name="div2_1_2_4" ng-show="showOtherCouponDates">
+							
+								<!------ open the DATE PICKER diary to select an END DATE  ------->
+								<span name="div2_1_2_4_1" ng-show="showDatePicker">
+								Pick the Maximum Expired Date of the coupons:
+									<input type="date" ng-model="inputDate" ng-value="{{today}}" ng-change="getOtherCouponsByDate()"/>
+								</span>
+								
+								<!------ show the coupons of the selected END DATE ------>
+								<div name="div2_1_2_4_2_message" ng-show="showBuyListByDateErrorMessage" class="message"><b>{{notPurchasedErrorMessage}} of that DATE, please choose another date</b></div>
+								<div name="div2_1_2_4_2" ng-show="showOtherCouponByDate" style="overflow-x: auto;">
+									<table> 
+										<tr>
+											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+											<span ng-hide="oneCoupon">
+												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+	            							</span></a>
+		           							</th>
+											<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+			            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
+		            							</span></a>
+											</th>
+											<th>Message</th>
+											<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
+												<span ng-hide="oneCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
+			            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
+		            							</span></a>
+											</th>
+											<th id="image">Image</th>
+										</tr>
+										<tr class="row" style="cursor: pointer;" ng-repeat="x in notPurchasedByDate | orderBy:sortType:sortReverse" ng-click="purchase(x.id)">
+											<td>{{ x.id }}</td>
+											<td>{{ x.endDate | date: "d.M.yy"}}</td>
+											<td>{{ x.startDate | date: "d.M.yy" }}</td>
+											<td>{{ x.type }}</td>
+											<td>{{ x.price }}</td>
+											<td>{{ x.title }}</td>
+											<td>{{ x.message }}</td>
+											<td id="td_center">{{ x.amount }}</td>
+											<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image"/></td>
+										</tr>
+									</table>
+									<!-- a purchase coupon confirm message -->
+									<div name="div2_1_2_4_2_1_message" ng-show="showPurchaseMessage" class="message">	{{purchaseMessage}}	</div>
+								</div>
+							</div>
+						</ul>
+						
+						<!----- R E F R E S H    M E N U  ----->
+						<h2><button class="button" ng-click="refreshBuy()">Refresh	<i class="fa fa-refresh" style="font-size:30px;"></i></button>
+							<button class="button" ng-click="closeBuyCouponsMenu()">Close selections 		<i class="fa fa-close" style="font-size:30px;"></i></button>
+						</h2>
+					</div>
+					<hr/>
+				</div>
+			</div>
+			
+		</section>
+		</div>
+	</div>
+	</body>
+</html>
