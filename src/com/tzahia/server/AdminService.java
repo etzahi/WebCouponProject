@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.google.gson.Gson;
 import com.tzahia.beans.Company;
 import com.tzahia.beans.CompanyInfo;
 import com.tzahia.beans.Customer;
@@ -148,15 +149,15 @@ public class AdminService {
 
 	@GET
 	@Path("getCompany")
-	@Produces(MediaType.APPLICATION_JSON)
-	public CompanyInfo getCompany(@QueryParam("compId") long id) {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getCompany(@QueryParam("compId") long id) {
 
 		AdminFacade admin = getFacade();
 
 		try {
 			Company company = admin.getCompany(id);
 			if (company != null) {
-				return new CompanyInfo(company);
+				return new Gson().toJson(new CompanyInfo(company));				
 			}
 		} catch (DbdaoException e) {
 			e.printStackTrace();

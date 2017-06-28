@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.google.gson.Gson;
 import com.tzahia.beans.Coupon;
 import com.tzahia.dao.CouponType;
 import com.tzahia.exceptions.DbdaoException;
@@ -83,11 +84,12 @@ public class CompanyService {
 	@GET
 	@Path("getCoupon")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Coupon getCoupon(@QueryParam("couponId") long couponId) {
+	public String getCoupon(@QueryParam("couponId") long couponId) {
 		try {
 			CompanyFacade facade = getFacade(); 
-			Coupon c = facade.getCoupon(couponId); 
-			return c;
+			Coupon c = facade.getCoupon(couponId);
+			Gson g = new Gson();
+			return g.toJson(c);
 		} catch (DbdaoException e) {
 			e.printStackTrace();
 		} 
