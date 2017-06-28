@@ -21,6 +21,7 @@ import com.tzahia.dao.CouponType;
 import com.tzahia.exceptions.DbdaoException;
 import com.tzahia.facade.CompanyFacade;
 
+@Path("company")
 public class CompanyService {
 
 	@Context    
