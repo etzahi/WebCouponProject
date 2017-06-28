@@ -34,7 +34,19 @@ public class CompanyFacade implements CouponClientFacade {
 		couponDBDAO.removeCoupon(coupon);
 		company = companyDBDAO.getCompany(company.getId());
 	}
+	
+	public void removeCoupon(long couponId) throws DbdaoException {
+		Coupon c = couponDBDAO.getCoupon(couponId);
+		this.removeCoupon(c);		
+	}
 
+	public void updateCoupon(long couponId, Date endDate, double price) throws DbdaoException {
+		Coupon c = this.getCoupon(couponId);
+		c.setEndDate(endDate);
+		c.setPrice(price);
+		couponDBDAO.updateCoupon(c);		
+	}
+	
 	public void updateCoupon(Coupon updatedCoupon) throws DbdaoException {
 		company = companyDBDAO.getCompany(company.getId());
 		ArrayList<Coupon> coupons = (ArrayList<Coupon>) company.getCoupons();
