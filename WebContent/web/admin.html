@@ -1,650 +1,950 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
-		<!---- define the ADMIN SPA Controller---->
-		<title>Admin</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-		<script type="text/javascript" src="http://localhost:8080/com.tzahia/controller/adminController.js"></script>
-		
-		<!---- design the COMPANY SPA ---->
-		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-		<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" type="text/css" href="http://localhost:8080/CouponProject/css/CouponSystemStyle.css">
-	</head>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!---- define the ADMIN SPA Controller---->
+<title>Admin</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script type="text/javascript"
+	src="http://localhost:8080/com.tzahia/controller/adminController.js"></script>
+
+<!---- design the COMPANY SPA ---->
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet"
+	href="http://jqueryui.com/resources/demos/style.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css"
+	href="http://localhost:8080/CouponProject/css/CouponSystemStyle.css">
+</head>
+
+
+<body>
+
+	<script>
+		function comapniesFunc() {
+			alert("Hello! I am an alert box!");			
+			$.getJSON("http://localhost:8080/com.tzahia/rest/admin/getAllCompanies", function(result){				
+		        $.each(result, function(i, field){
+		        	$('#cmpTbl').append( '<tr><td>' + 'result' +  i + '-' + JSON.stringify([i,field]) + '</td></tr>' );
+		            alert(result);		        	
+		        });
+		    });			
+		}
+	</script>
 	
-	<body>
 	<div ng-app="couponSystem">
-	
+
 		<div ng-controller="adminCtrl">
-		<header>
-			<div class="clearfix">
-			
-				<!----- side Menu: B A C K   B U T T O N S ----->
-				<div ng-show="showHeaderMenu" class="rightMenu">
-					<h3><button class="button" ng-click="backToMainMenu()">Back to Main Menu	<i class="fa fa-home" style="font-size:30px;"></i></button></h3>	 
-					<h3><button class="button" ng-click="exit()" ng-model="exitMessage">Leave my page	<i class="fa fa-user-circle-o" style="font-size:30px;"></i></button></h3>
+			<header>
+				<div>
+					<h1 id="pageTitle">Admin page</h1>
 				</div>
-				
-				<h1 id="pageTitle" >Admin page</h1>
-				<h1 ng-show="showWelcomeMessage">Hi Admin, Welcome to your page !</h1>		<!----- welcome message ----->
-				<h1 ng-show="showExitMessage">{{exitMessage}}</h1>							<!----- goodbye message ----->
-				<h2 ng-show="showSQLErrorMessage">{{sqlErrorMessage}}</h2>					<!----- SQL Error Message --->
-				
-			</div>
-			<hr/>
-		</header>
-			
-		<section>
-		
-			<!--******************************************************************************************************************-->
-			<!--*												 M A I N    M E N U  											 *-->
-			<!--******************************************************************************************************************-->
-								
-			<div name="div0" id="mainMenu" ng-show="showMainMenu">
-				<h2>Main Menu</h2>
-				<h2><button id="btn0_1" class="button" ng-click="openCompanies()">Open Companies	<i class="fa fa-money" style="font-size:30px;"></i></button></h2>
-				<h2><button id="btn0_2" class="button" ng-click="openCustomers()">Open Customers	<i class="fa fa-shopping-basket" style="font-size:30px;"></i></button></h2>
-				<h2><button id="btn0_3" class="button" ng-click="exit()" ng-model="exitMessage">Leave my page	
-				<i class="fa fa-user-circle-o" style="font-size:30px;"></i></button></h2>
-			</div>
-			
-			<!--******************************************************************************************************************-->
-			<!--*										 Button 1 :  C O M P A N I E S  										 *-->
-			<!--******************************************************************************************************************-->
-			
-			<div name="div1" ng-show="showCompanies">
-				
-				
-				<!-------- show Companies TITLE  ------->
-				<div name="div1_1" ng-show="showCompMenu" class="mainDiv">
-					<div name="div1_1_1" class="clearfix">
-						<p id="divTitle">Company Menu	<i class="fa fa-binoculars"></i></p>
-						
-						<!-------- Error Message  ------->
-						<br/>
-						<div name="div1_1_message" ng-show="showNoCompaniesErrorMessage" class="message">{{noCompaniesErrorMessage}}</div>
-					
-						<!----- C O M P A N Y    M E N U ------->
-						<h2><button id="btn1_1" class="button" ng-show="showCompaniesButton" ng-click="getCompanies()">
-						Show Companies	<i class="fa fa-binoculars" style="font-size:30px;"></i></button></h2>
-						<h2><button id="btn1_2" class="button" ng-click="createCompany()">
-						Add a New Company	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button></h2>
-						
-						
-						<!----- B A C K   B U T T O N S ----->
-						<hr/>
-						<h2><button class="button" ng-click="openCustomers()">Go to Customer Menu	<i class="fa fa-shopping-basket" style="font-size:30px;"></i></button></h2>
+				<hr />
+			</header>
+
+			<section>
+
+				<div name="menu" id="mainMenu">
+					<h2>Main Menu</h2>
+					<h2>
+						<button id="compBtn" class="button" onClick="comapniesFunc()">
+							Open Companies
+						</button>
+					</h2>
+					<div name="comapniesDiv" id="compDiv">
+						This is the companies div
+						<div name=companiesTable id=cmpTbl> </div>
 					</div>
+					<h2>
+						<button id="custBtn" class="button" onClick="customersFunc()">
+							Open Customers</button>
+					</h2>
+					<div name="customersDiv" id="custDiv">This is the customers
+						div</div>
 				</div>
-				
-				<!------------ Button 1_1 :   S H O W    C O M P A N I E S  --------------->
-				
-				<!-------- show Companies TITLE  ------->
-				<div name="div1_2" ng-show="showCompaniesOptions" class="mainDiv">
-					<div name="div1_2_1" class="clearfix">
-						<h3 id="divTitle">Show Companies	<i class="fa fa-binoculars" style="font-size:30px;"></i></h3>
-					
-						<!----- side Menu: B A C K   B U T T O N S ----->
-						<div name="div1_2_1_1" class="rightMenu">
-							<h3><button class="button" ng-click="createCompany()">Add a New Company		<i class="fa fa-plus-circle" style="font-size:20px;"></i></button></h3>	 
-							<h3><button class="button" ng-click="openCompanies()">Back to Company Menu	<i class="fa fa-money" style="font-size:20px;"></i></button></h3>
-							<h3><button class="button" ng-click="openCustomers()">Go to Customer Menu	<i class="fa fa-shopping-basket" style="font-size:20px;"></i></button></h3>
-						</div>
-						
-						<!------ Companies MENU for choosing the way to see them (All or By Name)------->
-						<div name="div1_2_1_2_message" ng-show="showNoCompaniesErrorMessage" class="message">{{noCompaniesErrorMessage}}</div>
-						<div name="div1_2_1_2" ng-show="showCompListMenu">
-						<h3>All the subscribed Companies are:</h3>
-							
-							<!-------- show subscribed Companies  ------->
-							<ul>
-								<li>
-									<input type="checkbox" ng-model="companies" ng-change="showAllCompanies()"/>
-									Show All Companies
-								</li>
-								<div name="div1_2_1_2_1_message" ng-show="showAllCompaniesErrorMessage" class="message">{{noCompaniesErrorMessage}}</div>
-								<div name="div1_2_1_2_1" ng-show="showCompaniesTable" style="overflow-x: auto;">
-									<table>
-										<tr>
-											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
-												<span ng-hide="oneCompany">
-													<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" id="sortArrow"></span>
-			            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" id="sortArrow"></span>
-		            							</span></a>
-	           								</th>
-											<th><a href="#" ng-click="sort.type = 'compName'; sort.reverse = !sort.reverse">Name
-												<span ng-hide="oneCompany">
-													<span ng-show="sort.type == 'compName' && !sort.reverse" class="fa fa-caret-down" id="sortArrow"></span>
-			            							<span ng-show="sort.type == 'compName' && sortReverse"  class="fa fa-caret-up" id="sortArrow"></span>
-		            							</span></a>
-		           							</th>
-											<th>Password</th>
-											<th style="width: 500px;">Email</th>
-											<th id="td_center" style="width: 300px;">Show Company's coupons</th>
-											<th id="td_center">Update</th>
-											<th id="td_center">Remove</th>
-										</tr>
-										<tr class="row" ng-repeat="x in companies | orderBy:sort.type:sort.reverse">
-											<td>{{ x.id }}</td>
-											<td>{{ x.compName }}</td>
-											<td>{{ x.password }}</td>
-											<td style="width: 500px;">{{ x.email }}</td>
-											<td id="td_center" style="width: 300px;">
-												<button  class="tableButton" ng-click="showCompanyCoupons(x.id)">
-												<i class="fa fa-gift" style="font-size:16px;"></i></button>
-											</td>
-											<td id="td_center">
-												<button  class="tableButton" ng-click="openUpdateCompForm(x.id)">
-												<i class="fa fa-pencil-square-o" style="font-size:16px;"></i></button>
-											</td>
-											<td id="td_center">
-												<button  class="tableButton" ng-click="removeCompany(x.id)"><i class="fa fa-trash" style="font-size:16px;"></i></button>
-											</td>
-										</tr>
-									</table>
-								</div>
-									
-								<!------ show a company by its NAME  ------->
-								<li>
-									<input type="checkbox" ng-model="companyNameList" ng-change="getCompaniesNameList()"/>
-									Show Company By Name
-								</li>
-								<div name="div1_2_1_2_2_message" ng-show="showCompanyByNameErrorMessage" class="message">{{noCompaniesErrorMessage}}</div>
-								
-								<!------ show an NAME LIST of all the companies  ------->
-								<div name="div1_2_1_2_2" ng-show="showCompanyNameList">
-									<select ng-model="selectedCompName" ng-change="getCompanyByName()" >
-										<option value="">---Please select---</option> 					<!-- not selected / blank option -->
-										<option ng-repeat="x in companies">{{x.compName}}</option>
-									</select>
-								</div>
-								
-								<!------ show the company of the selected NAME  ------>
-								<div name="div1_2_1_2_3_message" ng-show="showCantFindErrorMessage"><h2>{{cantFindErrorMessage}}</h2></div>
-								<div name="div1_2_1_2_3" ng-show="showCompanyByName" style="overflow-x: auto;">
-									<table>
-										<tr>
-											<th>ID</th>
-											<th>Name</th>
-											<th>Password</th>
-											<th style="width: 500px;">Email</th>
-											<th id="td_center" style="width: 300px;">Show Company's coupons</th>
-											<th id="td_center">Update</th>
-											<th id="td_center">Remove</th>
-										</tr>
-										<tr class="row">
-											<td>{{ company.id }}</td>
-											<td>{{ company.compName }}</td>
-											<td>{{ company.password }}</td>
-											<td style="width: 500px;">{{ company.email }}</td>
-											<td id="td_center" style="width: 300px;">
-												<button  class="tableButton" ng-click="showCompanyCoupons(company.id)">
-												<i class="fa fa-gift" style="font-size:16px;"></i></button>
-											</td>
-											<td id="td_center">
-												<button  class="tableButton" ng-click="openUpdateCompForm(company.id)">
-												<i class="fa fa-pencil-square-o" style="font-size:16px;"></i></button>
-											</td>
-											<td id="td_center">
-												<button  class="tableButton" ng-click="removeCompany(company.id)"><i class="fa fa-trash" style="font-size:16px;"></i></button>
-											</td>
-										</tr>
-									</table>
-								</div>
-							</ul>
-							<div name="div1_2_1_3_message" ng-show="showRemoveCompanyConfirmMessage" class="message"> {{removeCompanyMessage}} </div>			<!-- a Remove Company confirm message -->
-							<div ng-show="showNoCompanyCouponsErrorMessage" class="message">{{noCompanyCouponsErrorMessage}}</div>								<!-- No Company's coupons Error message -->
-							
-							<!----- R E F R E S H    M E N U  ----->
+
+
+
+
+
+
+
+
+
+
+				<!--******************************************************************************************************************-->
+				<!--*										 Button 1 :  C O M P A N I E S  										 *-->
+				<!--******************************************************************************************************************-->
+
+				<div name="div1" ng-show="showCompanies">
+
+
+					<!-------- show Companies TITLE  ------->
+					<div name="div1_1" ng-show="showCompMenu" class="mainDiv">
+						<div name="div1_1_1" class="clearfix">
+							<p id="divTitle">
+								Company Menu <i class="fa fa-binoculars"></i>
+							</p>
+
+							<!-------- Error Message  ------->
+							<br />
+							<div name="div1_1_message" ng-show="showNoCompaniesErrorMessage"
+								class="message">{{noCompaniesErrorMessage}}</div>
+
+							<!----- C O M P A N Y    M E N U ------->
 							<h2>
-								<button class="button" ng-click="refreshCompany()">	   Refresh				<i class="fa fa-refresh" style="font-size:30px;"></i></button>
-								<button class="button" ng-click="closeShowCompanies()">Close selections 	<i class="fa fa-close" style="font-size:30px;"></i></button>
+								<button id="btn1_1" class="button" ng-show="showCompaniesButton"
+									ng-click="getCompanies()">
+									Show Companies <i class="fa fa-binoculars"
+										style="font-size: 30px;"></i>
+								</button>
 							</h2>
-						</div>
-					
-					
-						<!------- S H O W     A L L    C O M P A N Y'S    C O U P O N S ------->
-						<div name="div1_2_1_3" ng-show="showAllCompCoupons" style="overflow-x: auto;">
-						<h3>The Coupons of {{webCompany.compName}} Company are:</h3>
-							<table>
-								<tr>
-									<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
-											<span ng-hide="oneCompCoupon">
-												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-											</span></a>
-           							</th>
-									<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
-										<span ng-hide="oneCompCoupon">
-											<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
-										<span ng-hide="oneCompCoupon">
-											<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
-	            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
-            							</span></a>
-									</th>
-									<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
-										<span ng-hide="oneCompCoupon">
-											<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
-										<span ng-hide="oneCompCoupon">
-											<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
-										<span ng-hide="oneCompCoupon">
-											<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th>Message</th>
-									<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
-										<span ng-hide="oneCompCoupon">
-											<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th id="image">Image</th>
-								</tr>
-								<tr ng-repeat="x in compCoupons | orderBy:sort.type:sort.reverse">
-									<td>{{ x.id }}</td>
-									<td>{{ x.type }}</td>
-									<td>{{ x.title }}</td>
-									<td>{{ x.price }}</td>
-									<td>{{ x.startDate | date: "d.M.yy" }}</td>
-									<td>{{ x.endDate | date: "d.M.yy"}}</td>
-									<td>{{ x.message }}</td>
-									<td id="td_center">{{ x.amount }}</td>
-									<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{compName}}'s Coupon Image"/></td>
-								</tr>
-							</table>
-							
-							<!----- R E F R E S H    M E N U  ----->
 							<h2>
-								<button class="button" ng-click="closeCompCoupon()">   Close 	<i class="fa fa-close" style="font-size:30px;"></i></button>
-								<button class="button" ng-click="refreshCompCoupons()">Refresh	<i class="fa fa-refresh" style="font-size:30px;"></i></button>
+								<button id="btn1_2" class="button" ng-click="createCompany()">
+									Add a New Company <i class="fa fa-plus-circle"
+										style="font-size: 30px;"></i>
+								</button>
+							</h2>
+
+
+							<!----- B A C K   B U T T O N S ----->
+							<hr />
+							<h2>
+								<button class="button" ng-click="openCustomers()">
+									Go to Customer Menu <i class="fa fa-shopping-basket"
+										style="font-size: 30px;"></i>
+								</button>
 							</h2>
 						</div>
-						<hr/>
 					</div>
-				</div>
-				
-				<!------- E D I T   C O M P A N Y   W I N D O W ------->
-				
-				<!-------- edit Companies TITLE  ------->
-				<div name="div1_3" ng-show="showEditCompany" class="mainDiv">
-					<h2 id="divTitle">Edit Companies	<i class="fa fa-edit" style="font-size:35px;"></i></h2>
-						
-					<!------- Button 1_2 :  A D D    A    N E W   C O M P A N Y  ------->
-			
-					<div name="div1_3_1" ng-show="showAddCompanyForm">
-						<form name="addCompForm" novalidate>
-							<h3>Please fill the new Company Details:</h3>
-							<fieldset>
-		  						<legend><h4>Create a new Company:</h4></legend>
-									<p>	<span ng-class="!addCompForm.compName.$valid ? 'smallComment' : 'hdenStar' ">*</span>
-										<label for="name">Company's Name</label>
-										<input type="text" name="compName" required ng-model="compName" placeholder="Company's Name..."/>
-									</p>
-									<p>	<span ng-class="!addCompForm.compPassword.$valid ? 'smallComment' : 'hdenStar' ">*</span>
-										<label for="password">Company's Password</label>
-										<input type="password" name="compPassword" required ng-model="compPassword" placeholder="Company's Password..."/>
-									</p>
-									<p>	<span class="hiddenStar">*</span>
-										<label for="price">Company's E-mail</label>
-										<input type="email" name="compEmail" min="1" ng-model="compEmail" placeholder="Company's Email...">
-										<span class="smallComment" ng-hide="addCompForm.email.$valid" 
-											  ng-if="addCompForm.email.$valid == false && addCompForm.email.$dirty == true">
-											  incorrect email address!</span>
-									</p>
-							</fieldset>
-							
-							<!-- open the CONFIRM window to see if the Admin succeed to add a new Company or not -->
-							<div name="div1_3_1_1" ng-show="showAddCompanyConfirmMessage" class="message"> {{addCompanyConfirm}} </div>
-							
-							<h2><button type="submit" ng-class="addCompForm.$valid ?'button':'disableButton'" ng-click="addCompany()">
-								Add Company	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button>
-								<button type="reset"  class="button" ng-click="resetForm('addCompForm')">
-								Reset	<i class="fa fa-eraser" style="font-size:30px;"></i></button>
-								<button class="button" ng-click="getCompanies()">Close 	<i class="fa fa-close" style="font-size:30px;"></i></button>
-							</h2>
-						</form>
+
+					<!------------ Button 1_1 :   S H O W    C O M P A N I E S  --------------->
+
+					<!-------- show Companies TITLE  ------->
+					<div name="div1_2" ng-show="showCompaniesOptions" class="mainDiv">
+						<div name="div1_2_1" class="clearfix">
+							<h3 id="divTitle">
+								Show Companies <i class="fa fa-binoculars"
+									style="font-size: 30px;"></i>
+							</h3>
+
+							<!----- side Menu: B A C K   B U T T O N S ----->
+							<div name="div1_2_1_1" class="rightMenu">
+								<h3>
+									<button class="button" ng-click="createCompany()">
+										Add a New Company <i class="fa fa-plus-circle"
+											style="font-size: 20px;"></i>
+									</button>
+								</h3>
+								<h3>
+									<button class="button" ng-click="openCompanies()">
+										Back to Company Menu <i class="fa fa-money"
+											style="font-size: 20px;"></i>
+									</button>
+								</h3>
+								<h3>
+									<button class="button" ng-click="openCustomers()">
+										Go to Customer Menu <i class="fa fa-shopping-basket"
+											style="font-size: 20px;"></i>
+									</button>
+								</h3>
+							</div>
+
+							<!------ Companies MENU for choosing the way to see them (All or By Name)------->
+							<div name="div1_2_1_2_message"
+								ng-show="showNoCompaniesErrorMessage" class="message">{{noCompaniesErrorMessage}}</div>
+							<div name="div1_2_1_2" ng-show="showCompListMenu">
+								<h3>All the subscribed Companies are:</h3>
+
+								<!-------- show subscribed Companies  ------->
+								<ul>
+									<li><input type="checkbox" ng-model="companies"
+										ng-change="showAllCompanies()" /> Show All Companies</li>
+									<div name="div1_2_1_2_1_message"
+										ng-show="showAllCompaniesErrorMessage" class="message">{{noCompaniesErrorMessage}}</div>
+									<div name="div1_2_1_2_1" ng-show="showCompaniesTable"
+										style="overflow-x: auto;">
+										<table>
+											<tr>
+												<th><a href="#"
+													ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+														<span ng-hide="oneCompany"> <span
+															ng-show="sort.type == 'id' && !sort.reverse"
+															class="fa fa-caret-down" id="sortArrow"></span> <span
+															ng-show="sort.type == 'id' && sortReverse"
+															class="fa fa-caret-up" id="sortArrow"></span>
+													</span>
+												</a></th>
+												<th><a href="#"
+													ng-click="sort.type = 'compName'; sort.reverse = !sort.reverse">Name
+														<span ng-hide="oneCompany"> <span
+															ng-show="sort.type == 'compName' && !sort.reverse"
+															class="fa fa-caret-down" id="sortArrow"></span> <span
+															ng-show="sort.type == 'compName' && sortReverse"
+															class="fa fa-caret-up" id="sortArrow"></span>
+													</span>
+												</a></th>
+												<th>Password</th>
+												<th style="width: 500px;">Email</th>
+												<th id="td_center" style="width: 300px;">Show Company's
+													coupons</th>
+												<th id="td_center">Update</th>
+												<th id="td_center">Remove</th>
+											</tr>
+											<tr class="row"
+												ng-repeat="x in companies | orderBy:sort.type:sort.reverse">
+												<td>{{ x.id }}</td>
+												<td>{{ x.compName }}</td>
+												<td>{{ x.password }}</td>
+												<td style="width: 500px;">{{ x.email }}</td>
+												<td id="td_center" style="width: 300px;">
+													<button class="tableButton"
+														ng-click="showCompanyCoupons(x.id)">
+														<i class="fa fa-gift" style="font-size: 16px;"></i>
+													</button>
+												</td>
+												<td id="td_center">
+													<button class="tableButton"
+														ng-click="openUpdateCompForm(x.id)">
+														<i class="fa fa-pencil-square-o" style="font-size: 16px;"></i>
+													</button>
+												</td>
+												<td id="td_center">
+													<button class="tableButton" ng-click="removeCompany(x.id)">
+														<i class="fa fa-trash" style="font-size: 16px;"></i>
+													</button>
+												</td>
+											</tr>
+										</table>
+									</div>
+
+									<!------ show a company by its NAME  ------->
+									<li><input type="checkbox" ng-model="companyNameList"
+										ng-change="getCompaniesNameList()" /> Show Company By Name</li>
+									<div name="div1_2_1_2_2_message"
+										ng-show="showCompanyByNameErrorMessage" class="message">{{noCompaniesErrorMessage}}</div>
+
+									<!------ show an NAME LIST of all the companies  ------->
+									<div name="div1_2_1_2_2" ng-show="showCompanyNameList">
+										<select ng-model="selectedCompName"
+											ng-change="getCompanyByName()">
+											<option value="">---Please select---</option>
+											<!-- not selected / blank option -->
+											<option ng-repeat="x in companies">{{x.compName}}</option>
+										</select>
+									</div>
+
+									<!------ show the company of the selected NAME  ------>
+									<div name="div1_2_1_2_3_message"
+										ng-show="showCantFindErrorMessage">
+										<h2>{{cantFindErrorMessage}}</h2>
+									</div>
+									<div name="div1_2_1_2_3" ng-show="showCompanyByName"
+										style="overflow-x: auto;">
+										<table>
+											<tr>
+												<th>ID</th>
+												<th>Name</th>
+												<th>Password</th>
+												<th style="width: 500px;">Email</th>
+												<th id="td_center" style="width: 300px;">Show Company's
+													coupons</th>
+												<th id="td_center">Update</th>
+												<th id="td_center">Remove</th>
+											</tr>
+											<tr class="row">
+												<td>{{ company.id }}</td>
+												<td>{{ company.compName }}</td>
+												<td>{{ company.password }}</td>
+												<td style="width: 500px;">{{ company.email }}</td>
+												<td id="td_center" style="width: 300px;">
+													<button class="tableButton"
+														ng-click="showCompanyCoupons(company.id)">
+														<i class="fa fa-gift" style="font-size: 16px;"></i>
+													</button>
+												</td>
+												<td id="td_center">
+													<button class="tableButton"
+														ng-click="openUpdateCompForm(company.id)">
+														<i class="fa fa-pencil-square-o" style="font-size: 16px;"></i>
+													</button>
+												</td>
+												<td id="td_center">
+													<button class="tableButton"
+														ng-click="removeCompany(company.id)">
+														<i class="fa fa-trash" style="font-size: 16px;"></i>
+													</button>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</ul>
+								<div name="div1_2_1_3_message"
+									ng-show="showRemoveCompanyConfirmMessage" class="message">
+									{{removeCompanyMessage}}</div>
+								<!-- a Remove Company confirm message -->
+								<div ng-show="showNoCompanyCouponsErrorMessage" class="message">{{noCompanyCouponsErrorMessage}}</div>
+								<!-- No Company's coupons Error message -->
+
+								<!----- R E F R E S H    M E N U  ----->
+								<h2>
+									<button class="button" ng-click="refreshCompany()">
+										Refresh <i class="fa fa-refresh" style="font-size: 30px;"></i>
+									</button>
+									<button class="button" ng-click="closeShowCompanies()">
+										Close selections <i class="fa fa-close"
+											style="font-size: 30px;"></i>
+									</button>
+								</h2>
+							</div>
+
+
+							<!------- S H O W     A L L    C O M P A N Y'S    C O U P O N S ------->
+							<div name="div1_2_1_3" ng-show="showAllCompCoupons"
+								style="overflow-x: auto;">
+								<h3>The Coupons of {{webCompany.compName}} Company are:</h3>
+								<table>
+									<tr>
+										<th><a href="#"
+											ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+												<span ng-hide="oneCompCoupon"> <span
+													ng-show="sort.type == 'id' && !sort.reverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'id' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCompCoupon"> <span
+													ng-show="sort.type == 'type' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'type' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCompCoupon"> <span
+													ng-show="sort.type == 'title' && !sortReverse"
+													class="fa fa-caret-down"></span> <span
+													ng-show="sort.type == 'title' && sortReverse"
+													class="fa fa-caret-up"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCompCoupon"> <span
+													ng-show="sort.type == 'price' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'price' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start
+												Date <span ng-hide="oneCompCoupon"> <span
+													ng-show="sort.type == 'startDate' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'startDate' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire
+												Date <span ng-hide="oneCompCoupon"> <span
+													ng-show="sort.type == 'endDate' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'endDate' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th>Message</th>
+										<th><a href="#"
+											ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse"
+											id="td_center">Amount <span ng-hide="oneCompCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'amount' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span></a></th>
+										<th id="image">Image</th>
+									</tr>
+									<tr
+										ng-repeat="x in compCoupons | orderBy:sort.type:sort.reverse">
+										<td>{{ x.id }}</td>
+										<td>{{ x.type }}</td>
+										<td>{{ x.title }}</td>
+										<td>{{ x.price }}</td>
+										<td>{{ x.startDate | date: "d.M.yy" }}</td>
+										<td>{{ x.endDate | date: "d.M.yy"}}</td>
+										<td>{{ x.message }}</td>
+										<td id="td_center">{{ x.amount }}</td>
+										<td id="image"><img ng-if="!!x.image"
+											ng-src="{{x.image}}" alt="{{compName}}'s Coupon Image" /></td>
+									</tr>
+								</table>
+
+								<!----- R E F R E S H    M E N U  ----->
+								<h2>
+									<button class="button" ng-click="closeCompCoupon()">
+										Close <i class="fa fa-close" style="font-size: 30px;"></i>
+									</button>
+									<button class="button" ng-click="refreshCompCoupons()">
+										Refresh <i class="fa fa-refresh" style="font-size: 30px;"></i>
+									</button>
+								</h2>
+							</div>
+							<hr />
+						</div>
 					</div>
-				
-					<!------- U P D A T E   C O M P A N Y   F O R M ------->
-					
-					<div name="div1_3_2" ng-show="showUpdateCompForm">
-						<form name="updateCompForm" novalidate>
-							<h4>You may EDIT the PASSWORD or the E-MAIL of the selected Company:</h4>
-							<fieldset>
-		  						<legend><h4>Update Company: {{newCompany.compName}}</h4></legend>
-		  							<p> the ID of the company is: <i style="color: blue;"> {{newCompany.id}}</i></p>
-									<p>	
-										<label for="password">Enter a new Password</label>
-										<input type="password" name="newPassword" ng-model="newCompPassword" placeholder="{{newCompany.password}}">
+
+					<!------- E D I T   C O M P A N Y   W I N D O W ------->
+
+					<!-------- edit Companies TITLE  ------->
+					<div name="div1_3" ng-show="showEditCompany" class="mainDiv">
+						<h2 id="divTitle">
+							Edit Companies <i class="fa fa-edit" style="font-size: 35px;"></i>
+						</h2>
+
+						<!------- Button 1_2 :  A D D    A    N E W   C O M P A N Y  ------->
+
+						<div name="div1_3_1" ng-show="showAddCompanyForm">
+							<form name="addCompForm" novalidate>
+								<h3>Please fill the new Company Details:</h3>
+								<fieldset>
+									<legend>
+										<h4>Create a new Company:</h4>
+									</legend>
+									<p>
+										<span
+											ng-class="!addCompForm.compName.$valid ? 'smallComment' : 'hdenStar' ">*</span>
+										<label for="name">Company's Name</label> <input type="text"
+											name="compName" required ng-model="compName"
+											placeholder="Company's Name..." />
 									</p>
 									<p>
-										<label for="email">Enter a new E-mail</label>
-										<input type="email" name="newEmail" ng-model="newCompEmail" placeholder="{{newCompany.email}}"/>
-										<span class="smallComment" ng-hide="updateCompForm.email.$valid" 
-											  ng-if="updateCompForm.email.$valid == false && updateCompForm.email.$dirty == true">
-											  incorrect email address!</span>
+										<span
+											ng-class="!addCompForm.compPassword.$valid ? 'smallComment' : 'hdenStar' ">*</span>
+										<label for="password">Company's Password</label> <input
+											type="password" name="compPassword" required
+											ng-model="compPassword" placeholder="Company's Password..." />
 									</p>
-							</fieldset>
-								
-							<!-- open the CONFIRM window to see if the admin succeed to update the company or not -->
-							<div name="div1_3_2_1" ng-show="showUpdateCompanyConfirmMessage" class="message"> {{updateCompanyMessage}} </div>
-							
-							<h2><button type="submit" ng-class="updateCompForm.$valid ?'button':'disableButton'" ng-click="updateCompany()">
-								Update Company	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button>
-								<button type="reset"  class="button" ng-click="resetForm('updateCompForm')">
-								Reset	<i class="fa fa-eraser" style="font-size:30px;"></i></button>
-								<button class="button" ng-click="getCompanies()">Close 	<i class="fa fa-close" style="font-size:30px;"></i></button>
-							</h2>
-						</form>
-					</div>
-				</div>
-			</div>
-			
-			<!--******************************************************************************************************************-->
-			<!--*									 Button 2 :  C U S T O M E R S  								   			 *-->
-			<!--******************************************************************************************************************-->
-			
-			<div name="div2" ng-show="showCustomers">
-				
-				<!-------- show Customers TITLE  ------->
-				<div name="div2_1" ng-show="showCustMenu" class="mainDiv">
-					<div name="div2_1_1" class="clearfix">
-						<p id="divTitle">Customer Menu	<i class="fa fa-binoculars"></i></p>
-						
-						<!-------- Error Message  ------->
-						<br/>
-						<div name="div2_1_message" ng-show="showNoCustomersErrorMessage" class="message">{{noCompaniesErrorMessage}}</div>
-				
-				
-						<!----- C U S T O M E R    M E N U ------->
-						<h2><button id="btn2_1" class="button" ng-show="showCustomersButton" ng-click="getCustomers()">
-						Show Customers	<i class="fa fa-binoculars" style="font-size:30px;"></i></button></h2>
-						<h2><button id="btn2_2" class="button" ng-click="createCustomer()">
-						Add a New Customer	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button></h2>
-						
-						<!----- B A C K   B U T T O N S ----->
-						<hr/>
-						<h2><button class="button" ng-click="openCompanies()">Go to Company Menu	<i class="fa fa-money" style="font-size:30px;"></i></button></h2>
-					</div>
-				</div>
-				
-				<!------------ Button 2_1 :   S H O W    C U S T O M E R S  --------------->
-				
-				<!-------- show Customers TITLE  ------->
-				<div name="div2_2" ng-show="showCustomersOptions" class="mainDiv">
-					<div name="div2_2_1" class="clearfix">
-						<h2 id="divTitle">Show Customers	<i class="fa fa-binoculars" style="font-size:30px;"></i></h2>
-						
-						<!----- side Menu: B A C K   B U T T O N S ----->
-						<div name="div2_2_1_1" class="rightMenu">
-							<h3><button class="button" ng-click="createCustomer()">Add a New Customer	<i class="fa fa-plus-circle" style="font-size:20px;"></i></button></h3>	 
-							<h3><button class="button" ng-click="openCustomers()">Back to Customer Menu	<i class="fa fa-shopping-basket" style="font-size:20px;"></i></button></h3>
-							<h3><button class="button" ng-click="openCompanies()">Go to Company Menu	<i class="fa fa-money" style="font-size:20px;"></i></button></h3>
+									<p>
+										<span class="hiddenStar">*</span> <label for="price">Company's
+											E-mail</label> <input type="email" name="compEmail" min="1"
+											ng-model="compEmail" placeholder="Company's Email...">
+										<span class="smallComment" ng-hide="addCompForm.email.$valid"
+											ng-if="addCompForm.email.$valid == false && addCompForm.email.$dirty == true">
+											incorrect email address!</span>
+									</p>
+								</fieldset>
+
+								<!-- open the CONFIRM window to see if the Admin succeed to add a new Company or not -->
+								<div name="div1_3_1_1" ng-show="showAddCompanyConfirmMessage"
+									class="message">{{addCompanyConfirm}}</div>
+
+								<h2>
+									<button type="submit"
+										ng-class="addCompForm.$valid ?'button':'disableButton'"
+										ng-click="addCompany()">
+										Add Company <i class="fa fa-plus-circle"
+											style="font-size: 30px;"></i>
+									</button>
+									<button type="reset" class="button"
+										ng-click="resetForm('addCompForm')">
+										Reset <i class="fa fa-eraser" style="font-size: 30px;"></i>
+									</button>
+									<button class="button" ng-click="getCompanies()">
+										Close <i class="fa fa-close" style="font-size: 30px;"></i>
+									</button>
+								</h2>
+							</form>
 						</div>
-				
-						<!------ Customers MENU for choosing the way to see them (All or Name )------->
-						<div name="div2_2_1_2_message" ng-show="showNoCustomersErrorMessage" class="message">{{noCustomersErrorMessage}}</div>
-						<div name="div2_2_1_2" ng-show="showCustListMenu">
-						<h3>All the subscribed Customers are:</h3>
-							
-							<!-------- show subscribed Customers  ------->
-							<ul>
-								<li>
-									<input type="checkbox" ng-model="companies" ng-change="showAllCustomers()"/>
-									Show All Customers
-								</li>
-								<div name="div2_2_1_2_1_message" ng-show="showAllCustomersErrorMessage" class="message">{{noCustomersErrorMessage}}</div>
-								<div name="div2_2_1_2_1" ng-show="showCustomersTable" style="overflow-x: auto;">
-									<table>
-										<tr>
-											<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
-												<span ng-hide="oneCustomer">
-													<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" id="sortArrow"></span>
-	            									<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" id="sortArrow"></span>
-            									</span></a>
-		           							</th>
-											<th><a href="#" ng-click="sort.type = 'custName'; sort.reverse = !sort.reverse">Name
-												<span ng-hide="oneCustomer">
-													<span ng-show="sort.type == 'custName' && !sort.reverse" class="fa fa-caret-down" id="sortArrow"></span>
-	            									<span ng-show="sort.type == 'custName' && sortReverse"  class="fa fa-caret-up" id="sortArrow"></span>
-            									</span></a>
-		           							</th>
-											<th style="width: 500px;">Password</th>
-											<th id="td_center" style="width: 300px;">Show Customer's coupons</th>
-											<th id="td_center">Update</th>
-											<th id="td_center">Remove</th>
-										</tr>
-										<tr class="row" ng-repeat="x in customers | orderBy:sort.type:sort.reverse">
-											<td>{{ x.id }}</td>
-											<td>{{ x.custName }}</td>
-											<td style="width: 500px;">{{ x.password }}</td>
-											<td id="td_center" style="width: 300px;">
-												<button  class="tableButton" ng-click="showCustomerCoupons(x.id)">
-												<i class="fa fa-gift" style="font-size:16px;"></i></button>
-											</td>
-											<td id="td_center">
-												<button  class="tableButton" ng-click="openUpdateCustForm(x.id)">
-												<i class="fa fa-pencil-square-o" style="font-size:16px;"></i></button>
-											</td>
-											<td id="td_center">
-												<button  class="tableButton" ng-click="removeCustomer(x.id)"><i class="fa fa-trash" style="font-size:16px;"></i></button>
-											</td>
-										</tr>
-									</table>
-								</div>
-									
-								<!------ show a customer by its NAME  ------->
-								<li>
-									<input type="checkbox" ng-model="customerNameList" ng-change="getCustomersNameList()"/>
-									Show Customer By Name
-								</li>
-								<div name="div2_2_1_2_2_message" ng-show="showCustomerByNameErrorMessage" class="message">{{noCustomersErrorMessage}}</div>
-								
-								<!------ show an NAME LIST of all the customers  ------->
-								<div name="div2_2_1_2_2" ng-show="showCustomerNameList">
-									<select ng-model="selectedCustName" ng-change="getCustomerByName()" >
-										<option value="">---Please select---</option> 					<!-- not selected / blank option -->
-										<option ng-repeat="x in customers">{{x.custName}}</option>
-									</select>
-								</div>
-								
-								<!------ show the customer of the selected NAME ------>
-								<div name="div2_2_1_2_3_message" ng-show="showCantFindErrorMessage"><h2>{{cantFindErrorMessage}}</h2></div>
-								<div name="div2_2_1_2_3" ng-show="showCustomerByName" style="overflow-x: auto;">
-									<table>
-										<tr>
-											<th>ID</th>
-											<th>Name</th>
-											<th>Password</th>
-											<th id="td_center" style="width: 300px;">Show Customer's coupons</th>
-											<th id="td_center">Update</th>
-											<th id="td_center">Remove</th>
-										</tr>
-										<tr class="row">
-											<td>{{ customer.id }}</td>
-											<td>{{ customer.custName }}</td>
-											<td>{{ customer.password }}</td>
-											<td id="td_center" style="width: 300px;">
-												<button  class="tableButton" ng-click="showCustomerCoupons(customer.id)">
-												<i class="fa fa-gift" style="font-size:16px;"></i></button>
-											</td>
-											<td id="td_center">
-												<button  class="tableButton" ng-click="openUpdateCustForm(customer.id)">
-												<i class="fa fa-pencil-square-o" style="font-size:16px;"></i></button>
-											</td>
-											<td id="td_center">
-												<button  class="tableButton" ng-click="removeCustomer(customer.id)"><i class="fa fa-trash" style="font-size:16px;"></i></button>
-											</td>
-										</tr>
-									</table>
-								</div>
-							</ul>
-							<div name="div2_2_1_3_message" ng-show="showRemoveCustomerConfirmMessage" class="message"> {{removeCustomerMessage}} </div>			<!-- a Remove Customer confirm message -->
-							<div ng-show="showNoCustomerCouponsErrorMessage" class="message">{{noCustomerCouponsErrorMessage}}</div>							<!-- No Customer's coupons Error message -->
-							
-							<!----- R E F R E S H    M E N U  ----->
+
+						<!------- U P D A T E   C O M P A N Y   F O R M ------->
+
+						<div name="div1_3_2" ng-show="showUpdateCompForm">
+							<form name="updateCompForm" novalidate>
+								<h4>You may EDIT the PASSWORD or the E-MAIL of the selected
+									Company:</h4>
+								<fieldset>
+									<legend>
+										<h4>Update Company: {{newCompany.compName}}</h4>
+									</legend>
+									<p>
+										the ID of the company is: <i style="color: blue;">
+											{{newCompany.id}}</i>
+									</p>
+									<p>
+										<label for="password">Enter a new Password</label> <input
+											type="password" name="newPassword" ng-model="newCompPassword"
+											placeholder="{{newCompany.password}}">
+									</p>
+									<p>
+										<label for="email">Enter a new E-mail</label> <input
+											type="email" name="newEmail" ng-model="newCompEmail"
+											placeholder="{{newCompany.email}}" /> <span
+											class="smallComment" ng-hide="updateCompForm.email.$valid"
+											ng-if="updateCompForm.email.$valid == false && updateCompForm.email.$dirty == true">
+											incorrect email address!</span>
+									</p>
+								</fieldset>
+
+								<!-- open the CONFIRM window to see if the admin succeed to update the company or not -->
+								<div name="div1_3_2_1" ng-show="showUpdateCompanyConfirmMessage"
+									class="message">{{updateCompanyMessage}}</div>
+
+								<h2>
+									<button type="submit"
+										ng-class="updateCompForm.$valid ?'button':'disableButton'"
+										ng-click="updateCompany()">
+										Update Company <i class="fa fa-plus-circle"
+											style="font-size: 30px;"></i>
+									</button>
+									<button type="reset" class="button"
+										ng-click="resetForm('updateCompForm')">
+										Reset <i class="fa fa-eraser" style="font-size: 30px;"></i>
+									</button>
+									<button class="button" ng-click="getCompanies()">
+										Close <i class="fa fa-close" style="font-size: 30px;"></i>
+									</button>
+								</h2>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!--******************************************************************************************************************-->
+				<!--*									 Button 2 :  C U S T O M E R S  								   			 *-->
+				<!--******************************************************************************************************************-->
+
+				<div name="div2" ng-show="showCustomers">
+
+					<!-------- show Customers TITLE  ------->
+					<div name="div2_1" ng-show="showCustMenu" class="mainDiv">
+						<div name="div2_1_1" class="clearfix">
+							<p id="divTitle">
+								Customer Menu <i class="fa fa-binoculars"></i>
+							</p>
+
+							<!-------- Error Message  ------->
+							<br />
+							<div name="div2_1_message" ng-show="showNoCustomersErrorMessage"
+								class="message">{{noCompaniesErrorMessage}}</div>
+
+
+							<!----- C U S T O M E R    M E N U ------->
 							<h2>
-								<button class="button" ng-click="refreshCustomer()">   Refresh				<i class="fa fa-refresh" style="font-size:30px;"></i></button>
-								<button class="button" ng-click="closeShowCustomers()">Close selections 	<i class="fa fa-close" style="font-size:30px;"></i></button>
+								<button id="btn2_1" class="button" ng-show="showCustomersButton"
+									ng-click="getCustomers()">
+									Show Customers <i class="fa fa-binoculars"
+										style="font-size: 30px;"></i>
+								</button>
 							</h2>
-						</div>
-						
-						<!------- S H O W     A L L    C U S T O M E R 'S    C O U P O N S ------->
-						<div name="div2_2_1_3" ng-show="showAllCustCoupons" style="overflow-x: auto;">
-						<h3>The Coupons of {{webCustomer.custName}} Customer are:</h3>
-							<table>
-								<tr>
-									<th><a href="#" ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
-											<span ng-hide="oneCustCoupon">
-												<span ng-show="sort.type == 'id' && !sort.reverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-		            							<span ng-show="sort.type == 'id' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-											</span></a>
-           							</th>
-									<th><a href="#" ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
-										<span ng-hide="oneCustCoupon">
-											<span ng-show="sort.type == 'type' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'type' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th><a href="#" ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
-										<span ng-hide="oneCustCoupon">
-											<span ng-show="sort.type == 'price' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'price' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th><a href="#" ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start Date
-										<span ng-hide="oneCustCoupon">
-											<span ng-show="sort.type == 'startDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'startDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th><a href="#" ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire Date
-										<span ng-hide="oneCustCoupon">
-											<span ng-show="sort.type == 'endDate' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'endDate' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th><a href="#" ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
-										<span ng-hide="oneCustCoupon">
-											<span ng-show="sort.type == 'title' && !sortReverse" class="fa fa-caret-down"></span>
-	            							<span ng-show="sort.type == 'title' && sortReverse"  class="fa fa-caret-up"></span>
-            							</span></a>
-									</th>
-									<th>Message</th>
-									<th><a href="#" ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse" id="td_center">Amount
-										<span ng-hide="oneCustCoupon">
-											<span ng-show="sort.type == 'amount' && !sortReverse" class="fa fa-caret-down" style="font-size:15px;"></span>
-	            							<span ng-show="sort.type == 'amount' && sortReverse"  class="fa fa-caret-up" style="font-size:15px;"></span>
-            							</span></a>
-									</th>
-									<th id="image">Image</th>
-								</tr>
-								<tr ng-repeat="x in custCoupons | orderBy:sort.type:sort.reverse">
-									<td>{{ x.id }}</td>
-									<td>{{ x.type }}</td>
-									<td>{{ x.title }}</td>
-									<td>{{ x.price }}</td>
-									<td>{{ x.startDate | date: "d.M.yy" }}</td>
-									<td>{{ x.endDate | date: "d.M.yy"}}</td>
-									<td>{{ x.message }}</td>
-									<td id="td_center">{{ x.amount }}</td>
-									<td id="image"><img ng-if="!!x.image" ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image"/></td>
-								</tr>
-							</table>
-							
-							<!----- R E F R E S H    M E N U  ----->
 							<h2>
-								<button class="button" ng-click="closeCustCoupon()">   Close 	<i class="fa fa-close" style="font-size:30px;"></i></button>
-								<button class="button" ng-click="refreshCustCoupons()">Refresh	<i class="fa fa-refresh" style="font-size:30px;"></i></button>
+								<button id="btn2_2" class="button" ng-click="createCustomer()">
+									Add a New Customer <i class="fa fa-plus-circle"
+										style="font-size: 30px;"></i>
+								</button>
+							</h2>
+
+							<!----- B A C K   B U T T O N S ----->
+							<hr />
+							<h2>
+								<button class="button" ng-click="openCompanies()">
+									Go to Company Menu <i class="fa fa-money"
+										style="font-size: 30px;"></i>
+								</button>
 							</h2>
 						</div>
-						<hr/>
+					</div>
+
+					<!------------ Button 2_1 :   S H O W    C U S T O M E R S  --------------->
+
+					<!-------- show Customers TITLE  ------->
+					<div name="div2_2" ng-show="showCustomersOptions" class="mainDiv">
+						<div name="div2_2_1" class="clearfix">
+							<h2 id="divTitle">
+								Show Customers <i class="fa fa-binoculars"
+									style="font-size: 30px;"></i>
+							</h2>
+
+							<!----- side Menu: B A C K   B U T T O N S ----->
+							<div name="div2_2_1_1" class="rightMenu">
+								<h3>
+									<button class="button" ng-click="createCustomer()">
+										Add a New Customer <i class="fa fa-plus-circle"
+											style="font-size: 20px;"></i>
+									</button>
+								</h3>
+								<h3>
+									<button class="button" ng-click="openCustomers()">
+										Back to Customer Menu <i class="fa fa-shopping-basket"
+											style="font-size: 20px;"></i>
+									</button>
+								</h3>
+								<h3>
+									<button class="button" ng-click="openCompanies()">
+										Go to Company Menu <i class="fa fa-money"
+											style="font-size: 20px;"></i>
+									</button>
+								</h3>
+							</div>
+
+							<!------ Customers MENU for choosing the way to see them (All or Name )------->
+							<div name="div2_2_1_2_message"
+								ng-show="showNoCustomersErrorMessage" class="message">{{noCustomersErrorMessage}}</div>
+							<div name="div2_2_1_2" ng-show="showCustListMenu">
+								<h3>All the subscribed Customers are:</h3>
+
+								<!-------- show subscribed Customers  ------->
+								<ul>
+									<li><input type="checkbox" ng-model="companies"
+										ng-change="showAllCustomers()" /> Show All Customers</li>
+									<div name="div2_2_1_2_1_message"
+										ng-show="showAllCustomersErrorMessage" class="message">{{noCustomersErrorMessage}}</div>
+									<div name="div2_2_1_2_1" ng-show="showCustomersTable"
+										style="overflow-x: auto;">
+										<table>
+											<tr>
+												<th><a href="#"
+													ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+														<span ng-hide="oneCustomer"> <span
+															ng-show="sort.type == 'id' && !sort.reverse"
+															class="fa fa-caret-down" id="sortArrow"></span> <span
+															ng-show="sort.type == 'id' && sortReverse"
+															class="fa fa-caret-up" id="sortArrow"></span>
+													</span>
+												</a></th>
+												<th><a href="#"
+													ng-click="sort.type = 'custName'; sort.reverse = !sort.reverse">Name
+														<span ng-hide="oneCustomer"> <span
+															ng-show="sort.type == 'custName' && !sort.reverse"
+															class="fa fa-caret-down" id="sortArrow"></span> <span
+															ng-show="sort.type == 'custName' && sortReverse"
+															class="fa fa-caret-up" id="sortArrow"></span>
+													</span>
+												</a></th>
+												<th style="width: 500px;">Password</th>
+												<th id="td_center" style="width: 300px;">Show
+													Customer's coupons</th>
+												<th id="td_center">Update</th>
+												<th id="td_center">Remove</th>
+											</tr>
+											<tr class="row"
+												ng-repeat="x in customers | orderBy:sort.type:sort.reverse">
+												<td>{{ x.id }}</td>
+												<td>{{ x.custName }}</td>
+												<td style="width: 500px;">{{ x.password }}</td>
+												<td id="td_center" style="width: 300px;">
+													<button class="tableButton"
+														ng-click="showCustomerCoupons(x.id)">
+														<i class="fa fa-gift" style="font-size: 16px;"></i>
+													</button>
+												</td>
+												<td id="td_center">
+													<button class="tableButton"
+														ng-click="openUpdateCustForm(x.id)">
+														<i class="fa fa-pencil-square-o" style="font-size: 16px;"></i>
+													</button>
+												</td>
+												<td id="td_center">
+													<button class="tableButton" ng-click="removeCustomer(x.id)">
+														<i class="fa fa-trash" style="font-size: 16px;"></i>
+													</button>
+												</td>
+											</tr>
+										</table>
+									</div>
+
+									<!------ show a customer by its NAME  ------->
+									<li><input type="checkbox" ng-model="customerNameList"
+										ng-change="getCustomersNameList()" /> Show Customer By Name</li>
+									<div name="div2_2_1_2_2_message"
+										ng-show="showCustomerByNameErrorMessage" class="message">{{noCustomersErrorMessage}}</div>
+
+									<!------ show an NAME LIST of all the customers  ------->
+									<div name="div2_2_1_2_2" ng-show="showCustomerNameList">
+										<select ng-model="selectedCustName"
+											ng-change="getCustomerByName()">
+											<option value="">---Please select---</option>
+											<!-- not selected / blank option -->
+											<option ng-repeat="x in customers">{{x.custName}}</option>
+										</select>
+									</div>
+
+									<!------ show the customer of the selected NAME ------>
+									<div name="div2_2_1_2_3_message"
+										ng-show="showCantFindErrorMessage">
+										<h2>{{cantFindErrorMessage}}</h2>
+									</div>
+									<div name="div2_2_1_2_3" ng-show="showCustomerByName"
+										style="overflow-x: auto;">
+										<table>
+											<tr>
+												<th>ID</th>
+												<th>Name</th>
+												<th>Password</th>
+												<th id="td_center" style="width: 300px;">Show
+													Customer's coupons</th>
+												<th id="td_center">Update</th>
+												<th id="td_center">Remove</th>
+											</tr>
+											<tr class="row">
+												<td>{{ customer.id }}</td>
+												<td>{{ customer.custName }}</td>
+												<td>{{ customer.password }}</td>
+												<td id="td_center" style="width: 300px;">
+													<button class="tableButton"
+														ng-click="showCustomerCoupons(customer.id)">
+														<i class="fa fa-gift" style="font-size: 16px;"></i>
+													</button>
+												</td>
+												<td id="td_center">
+													<button class="tableButton"
+														ng-click="openUpdateCustForm(customer.id)">
+														<i class="fa fa-pencil-square-o" style="font-size: 16px;"></i>
+													</button>
+												</td>
+												<td id="td_center">
+													<button class="tableButton"
+														ng-click="removeCustomer(customer.id)">
+														<i class="fa fa-trash" style="font-size: 16px;"></i>
+													</button>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</ul>
+								<div name="div2_2_1_3_message"
+									ng-show="showRemoveCustomerConfirmMessage" class="message">
+									{{removeCustomerMessage}}</div>
+								<!-- a Remove Customer confirm message -->
+								<div ng-show="showNoCustomerCouponsErrorMessage" class="message">{{noCustomerCouponsErrorMessage}}</div>
+								<!-- No Customer's coupons Error message -->
+
+								<!----- R E F R E S H    M E N U  ----->
+								<h2>
+									<button class="button" ng-click="refreshCustomer()">
+										Refresh <i class="fa fa-refresh" style="font-size: 30px;"></i>
+									</button>
+									<button class="button" ng-click="closeShowCustomers()">
+										Close selections <i class="fa fa-close"
+											style="font-size: 30px;"></i>
+									</button>
+								</h2>
+							</div>
+
+							<!------- S H O W     A L L    C U S T O M E R 'S    C O U P O N S ------->
+							<div name="div2_2_1_3" ng-show="showAllCustCoupons"
+								style="overflow-x: auto;">
+								<h3>The Coupons of {{webCustomer.custName}} Customer are:</h3>
+								<table>
+									<tr>
+										<th><a href="#"
+											ng-click="sort.type = 'id'; sort.reverse = !sort.reverse">ID
+												<span ng-hide="oneCustCoupon"> <span
+													ng-show="sort.type == 'id' && !sort.reverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'id' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'type'; sort.reverse = !sort.reverse">Type
+												<span ng-hide="oneCustCoupon"> <span
+													ng-show="sort.type == 'type' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'type' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'price'; sort.reverse = !sort.reverse">Price
+												<span ng-hide="oneCustCoupon"> <span
+													ng-show="sort.type == 'price' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'price' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'startDate'; sort.reverse = !sort.reverse">Start
+												Date <span ng-hide="oneCustCoupon"> <span
+													ng-show="sort.type == 'startDate' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'startDate' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'endDate'; sort.reverse = !sort.reverse">Expire
+												Date <span ng-hide="oneCustCoupon"> <span
+													ng-show="sort.type == 'endDate' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'endDate' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span>
+										</a></th>
+										<th><a href="#"
+											ng-click="sort.type = 'title'; sort.reverse = !sort.reverse">Title
+												<span ng-hide="oneCustCoupon"> <span
+													ng-show="sort.type == 'title' && !sortReverse"
+													class="fa fa-caret-down"></span> <span
+													ng-show="sort.type == 'title' && sortReverse"
+													class="fa fa-caret-up"></span>
+											</span>
+										</a></th>
+										<th>Message</th>
+										<th><a href="#"
+											ng-click="sort.type = 'amount'; sort.reverse = !sort.reverse"
+											id="td_center">Amount <span ng-hide="oneCustCoupon">
+													<span ng-show="sort.type == 'amount' && !sortReverse"
+													class="fa fa-caret-down" style="font-size: 15px;"></span> <span
+													ng-show="sort.type == 'amount' && sortReverse"
+													class="fa fa-caret-up" style="font-size: 15px;"></span>
+											</span></a></th>
+										<th id="image">Image</th>
+									</tr>
+									<tr
+										ng-repeat="x in custCoupons | orderBy:sort.type:sort.reverse">
+										<td>{{ x.id }}</td>
+										<td>{{ x.type }}</td>
+										<td>{{ x.title }}</td>
+										<td>{{ x.price }}</td>
+										<td>{{ x.startDate | date: "d.M.yy" }}</td>
+										<td>{{ x.endDate | date: "d.M.yy"}}</td>
+										<td>{{ x.message }}</td>
+										<td id="td_center">{{ x.amount }}</td>
+										<td id="image"><img ng-if="!!x.image"
+											ng-src="{{x.image}}" alt="{{custName}}'s Coupon Image" /></td>
+									</tr>
+								</table>
+
+								<!----- R E F R E S H    M E N U  ----->
+								<h2>
+									<button class="button" ng-click="closeCustCoupon()">
+										Close <i class="fa fa-close" style="font-size: 30px;"></i>
+									</button>
+									<button class="button" ng-click="refreshCustCoupons()">
+										Refresh <i class="fa fa-refresh" style="font-size: 30px;"></i>
+									</button>
+								</h2>
+							</div>
+							<hr />
+						</div>
+					</div>
+
+					<!------- E D I T   C U S T O M E R   W I N D O W ------->
+
+					<!-------- edit Customers TITLE  ------->
+					<div name="div2_3" ng-show="showEditCustomer" class="mainDiv">
+						<h2 id="divTitle">
+							Edit Customers <i class="fa fa-edit" style="font-size: 35px;"></i>
+						</h2>
+
+						<!------- Button 2_2 :  A D D    A    N E W   C U S T O M E R  ------->
+
+						<div name="div2_3_1" ng-show="showAddCustomerForm">
+							<form name="addCustForm" novalidate>
+								<h3>Please fill the new Customer Details:</h3>
+								<fieldset>
+									<legend>
+										<h4>Create a new Customer:</h4>
+									</legend>
+									<p>
+										<span
+											ng-class="!addCustForm.custName.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
+										<label for="name">Customer's Name</label> <input type="text"
+											name="custName" required ng-model="custName"
+											placeholder="Customer's Name..." />
+									</p>
+									<p>
+										<span
+											ng-class="!addCustForm.custPassword.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
+										<label for="password">Customer's Password</label> <input
+											type="password" name="custPassword" required
+											ng-model="custPassword" placeholder="Customer's Password..." />
+									</p>
+								</fieldset>
+
+								<!-- open the CONFIRM window to see if the Admin succeed to add a new Customer or not -->
+								<div name="div2_3_1_1" ng-show="showAddCustomerConfirmMessage"
+									class="message">{{addCustomerConfirm}}</div>
+
+								<h2>
+									<button type="submit"
+										ng-class="addCustForm.$valid ?'button':'disableButton'"
+										ng-click="addCustomer()">
+										Add Customer <i class="fa fa-plus-circle"
+											style="font-size: 30px;"></i>
+									</button>
+									<button type="reset" class="button"
+										ng-click="resetForm('addCustForm')">
+										Reset <i class="fa fa-eraser" style="font-size: 30px;"></i>
+									</button>
+									<button class="button" ng-click="getCustomers()">
+										Close <i class="fa fa-close" style="font-size: 30px;"></i>
+									</button>
+								</h2>
+							</form>
+						</div>
+
+						<!------- U P D A T E   C U S T O M E R   F O R M ------->
+
+						<div name="div2_3_2" ng-show="showUpdateCustForm">
+							<form name="updateCustForm" novalidate>
+								<h4>You may EDIT the PASSWORD of the selected Company:</h4>
+								<fieldset>
+									<legend>
+										<h4>Update Customer: {{newCustomer.custName}}</h4>
+									</legend>
+									<p>
+										the ID of the customer is: <i style="color: blue;">
+											{{newCustomer.id}}</i>
+									</p>
+									<p>
+										<label for="password">Enter a new Password</label> <input
+											type="password" name="newPassword" ng-model="newCustPassword"
+											placeholder="{{newCustomer.password}}">
+									</p>
+								</fieldset>
+
+								<!-- open the CONFIRM window to see if the admin succeed to update the customer or not -->
+								<div name="div2_3_2_1"
+									ng-show="showUpdateCustomerConfirmMessage" class="message">
+									{{updateCustomerMessage}}</div>
+
+								<h2>
+									<button type="submit"
+										ng-class="updateCustForm.$valid ?'button':'disableButton'"
+										ng-click="updateCustomer()">
+										Update Customer <i class="fa fa-plus-circle"
+											style="font-size: 30px;"></i>
+									</button>
+									<button type="reset" class="button"
+										ng-click="resetForm('updateCustForm')">
+										Reset <i class="fa fa-eraser" style="font-size: 30px;"></i>
+									</button>
+									<button class="button" ng-click="getCustomers()">
+										Close <i class="fa fa-close" style="font-size: 30px;"></i>
+									</button>
+								</h2>
+							</form>
+						</div>
+						<hr />
 					</div>
 				</div>
-			
-				<!------- E D I T   C U S T O M E R   W I N D O W ------->
-				
-				<!-------- edit Customers TITLE  ------->
-				<div name="div2_3" ng-show="showEditCustomer" class="mainDiv">
-					<h2 id="divTitle">Edit Customers	<i class="fa fa-edit" style="font-size:35px;"></i></h2>
-						
-					<!------- Button 2_2 :  A D D    A    N E W   C U S T O M E R  ------->
-			
-					<div name="div2_3_1" ng-show="showAddCustomerForm">
-						<form name="addCustForm" novalidate>
-							<h3>Please fill the new Customer Details:</h3>
-							<fieldset>
-		  						<legend><h4>Create a new Customer:</h4></legend>
-									<p>	<span ng-class="!addCustForm.custName.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
-										<label for="name">Customer's Name</label>
-										<input type="text" name="custName" required ng-model="custName" placeholder="Customer's Name..."/>
-									</p>
-									<p>	<span ng-class="!addCustForm.custPassword.$valid ? 'smallComment' : 'hiddenStar' ">*</span>
-										<label for="password">Customer's Password</label>
-										<input type="password" name="custPassword" required ng-model="custPassword" placeholder="Customer's Password..."/>
-									</p>
-							</fieldset>
-							
-							<!-- open the CONFIRM window to see if the Admin succeed to add a new Customer or not -->
-							<div name="div2_3_1_1" ng-show="showAddCustomerConfirmMessage" class="message"> {{addCustomerConfirm}} </div>
-							
-							<h2><button type="submit" ng-class="addCustForm.$valid ?'button':'disableButton'" ng-click="addCustomer()">
-								Add Customer	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button>
-								<button type="reset"  class="button" ng-click="resetForm('addCustForm')">
-								Reset	<i class="fa fa-eraser" style="font-size:30px;"></i></button>
-								<button class="button" ng-click="getCustomers()">Close 	<i class="fa fa-close" style="font-size:30px;"></i></button>
-							</h2>
-						</form>
-					</div>
-				
-					<!------- U P D A T E   C U S T O M E R   F O R M ------->
-					
-					<div name="div2_3_2" ng-show="showUpdateCustForm">
-						<form name="updateCustForm" novalidate>
-							<h4>You may EDIT the PASSWORD of the selected Company:</h4>
-							<fieldset>
-		  						<legend><h4>Update Customer: {{newCustomer.custName}}</h4></legend>
-		  							<p> the ID of the customer is: <i style="color: blue;"> {{newCustomer.id}}</i></p>
-									<p>	
-										<label for="password">Enter a new Password</label>
-										<input type="password" name="newPassword" ng-model="newCustPassword" placeholder="{{newCustomer.password}}">
-									</p>
-							</fieldset>
-								
-							<!-- open the CONFIRM window to see if the admin succeed to update the customer or not -->
-							<div name="div2_3_2_1" ng-show="showUpdateCustomerConfirmMessage" class="message"> {{updateCustomerMessage}} </div>
-							
-							<h2><button type="submit" ng-class="updateCustForm.$valid ?'button':'disableButton'" ng-click="updateCustomer()">
-								Update Customer	<i class="fa fa-plus-circle" style="font-size:30px;"></i></button>
-								<button type="reset"  class="button" ng-click="resetForm('updateCustForm')">
-								Reset	<i class="fa fa-eraser" style="font-size:30px;"></i></button>
-								<button class="button" ng-click="getCustomers()">Close 	<i class="fa fa-close" style="font-size:30px;"></i></button>
-							</h2>
-						</form>
-					</div>
-					<hr/>
-				</div>
-			</div>
-			
-		</section>
+
+			</section>
 		</div>
 	</div>
-	</body>
+</body>
 </html>

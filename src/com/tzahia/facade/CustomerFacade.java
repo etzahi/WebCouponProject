@@ -43,10 +43,11 @@ public class CustomerFacade implements CouponClientFacade {
 		if (currentDate.after(coupon.getEndDate())){
 			throw new FacadeException("This coupon has expired");
 		}
+		coupon.setAmount(coupon.getAmount()-1);
 		couponDBDAO.updateCoupon(coupon);
 		customer.getCoupons().add(coupon);
 		customerDBDAO.updateCustomer(customer);
-		coupon.setAmount(coupon.getAmount()-1);
+		
 	}
 	
 	public Collection<Coupon> getAllPurchasedCoupon() throws DbdaoException{

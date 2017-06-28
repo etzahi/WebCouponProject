@@ -240,38 +240,8 @@ var app = angular.module('couponSystem', []);
 	 *-----------------------------
 	 */ 
 	// open the "Show Companies" page and the Companies Menu
-	$scope.openCompanies = function(){
-		
-		// get the Admin model with the update collections of all companies from the database
-		getAdmin("COMPANY");
-		
-		$timeout (function(){
-			
-			$scope.showSQLErrorMessage=false;							// close the SQL ERROR window
-			$scope.showMainMenu=false;									// close the Main Menu window
-			$scope.showCustomers=false;									// close the Customers window
-			$scope.showCompaniesOptions=false;							// close the SHOW companies window
-			$scope.showEditCompany=false;								// close the EDIT Companies Window
-			$scope.showExitMessage=false;								// close the Exit Message
-			
-			$scope.showCompanies=true;									// open the Companies Window
-			$scope.showHeaderMenu=true;									// open the back Menu in the header
-			$scope.showCompMenu=true;									// open the Edit Companies's Menu
-			
-			// check if there is any subscribed companies
-			if (getAdminArray("COMPANY") != null){						// force the companies list to be an array even if there is only one company
-				
-				$scope.showCompaniesButton=true;						// open the "show companies" button
-				$scope.showNoCompaniesErrorMessage=false;				// close the ERROR window
-			}
-			// NO COMPANIES
-			else {
-				
-				$scope.showNoCompaniesErrorMessage=true;				// open the ERROR window
-				$scope.showCompaniesButton=false;						// close the "show companies" button
-			}
-			
-		}, 100);
+	$scope.openCompanies = function(){		
+		alert("This is the companies!");		
 	};
 	
 	/*
