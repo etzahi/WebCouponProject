@@ -82,10 +82,12 @@ public class CompanyService {
 	
 	@GET
 	@Path("getCoupon")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Coupon getCoupon(@QueryParam("couponId") long couponId) {
 		try {
-			return getFacade().getCoupon(couponId);
+			CompanyFacade facade = getFacade(); 
+			Coupon c = facade.getCoupon(couponId); 
+			return c;
 		} catch (DbdaoException e) {
 			e.printStackTrace();
 		} 
