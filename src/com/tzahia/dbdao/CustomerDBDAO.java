@@ -101,7 +101,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		}
 	}
-
+	
 	// Update
 	@Override
 	public void updateCustomer(Customer customer) throws DbdaoException {
