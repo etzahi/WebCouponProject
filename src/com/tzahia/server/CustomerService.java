@@ -1,8 +1,5 @@
 package com.tzahia.server;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,6 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.google.gson.Gson;
 import com.tzahia.beans.Coupon;
 import com.tzahia.dao.CouponType;
 import com.tzahia.dbdao.CouponDBDAO;
@@ -26,7 +24,7 @@ public class CustomerService {
 
 	private CustomerFacade getFacade() {
 		CustomerFacade cust = null;
-		cust = (CustomerFacade) request.getSession(true).getAttribute("facade");
+		cust = (CustomerFacade) request.getSession(false).getAttribute("facade");
 		return cust;
 	}
 	
@@ -54,41 +52,41 @@ public class CustomerService {
 	
 	@GET
 	@Path("getAllpurchased")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Coupon> getAllpurchased() {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getAllpurchased() {
 		try {
-			return getFacade().getAllPurchasedCoupon();
+			return new Gson().toJson(getFacade().getAllPurchasedCoupon());
 		} catch (DbdaoException e) {
 			e.printStackTrace();
 		} 
 
-		return Collections.emptySet();
+		return null;
 	}
 	
 	@GET
 	@Path("getAllpurchasedByType")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Coupon> getAllpurchasedByType(@QueryParam("couponType") String couponType) {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getAllpurchasedByType(@QueryParam("couponType") String couponType) {
 		try {
-			return getFacade().getAllPurchasedCouponByType(CouponType.valueOf(couponType));
+			return new Gson().toJson(getFacade().getAllPurchasedCouponByType(CouponType.valueOf(couponType)));
 		} catch (DbdaoException e) {
 			e.printStackTrace();
 		} 
 
-		return Collections.emptySet();
+		return null;
 	}
 	
 	@GET
 	@Path("getAllpurchasedByPrices")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Coupon> getAllpurchasedByPrice(@QueryParam("price") double price) {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getAllpurchasedByPrice(@QueryParam("price") double price) {
 		try {
-			return getFacade().getAllPurchasedCouponByPrice(price);
+			return new Gson().toJson(getFacade().getAllPurchasedCouponByPrice(price));
 		} catch (DbdaoException e) {
 			e.printStackTrace();
 		} 
 
-		return Collections.emptySet();
+		return null;
 	}	
 
 }

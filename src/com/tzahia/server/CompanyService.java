@@ -2,8 +2,6 @@ package com.tzahia.server;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +28,7 @@ public class CompanyService {
 
 	private CompanyFacade getFacade() {
 		CompanyFacade comp = null;
-		comp = (CompanyFacade) request.getSession(true).getAttribute("facade");
+		comp = (CompanyFacade) request.getSession(false).getAttribute("facade");
 		return comp;
 	}
 	
@@ -56,12 +54,12 @@ public class CompanyService {
 	public String removeCoupon(@QueryParam("couponId") long couponId) { 
 		try {			
 			getFacade().removeCoupon(couponId);
-			return "Coupon Successfully created";
+			return "Coupon Successfully removed";
 		} catch (DbdaoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "Failed to create coupon";
+		return "Failed to remove coupon";
 	}
 	
 	@GET
@@ -73,12 +71,12 @@ public class CompanyService {
 		try {			
 			Date formatedDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
 			getFacade().updateCoupon(couponId, formatedDate, price);
-			return "Coupon Successfully created";
+			return "Coupon Successfully updated";
 		} catch (DbdaoException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "Failed to create coupon";
+		return "Failed to update coupon";
 	}
 	
 	@GET
@@ -99,28 +97,28 @@ public class CompanyService {
 	
 	@GET
 	@Path("getAllCoupon")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Coupon> getAllCoupon() {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getAllCoupon() {
 		try {
-			return getFacade().getAllCoupons();
+			return new Gson().toJson(getFacade().getAllCoupons());
 		} catch (DbdaoException e) {
 			e.printStackTrace();
 		} 
 
-		return Collections.emptySet();
+		return null;
 	}
 	
 
 	@GET
 	@Path("getAllCouponByType")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Coupon> getAllCouponByType(@QueryParam("couponType") String couponType) {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getAllCouponByType(@QueryParam("couponType") String couponType) {
 		try {
-			return getFacade().getCouponByType(CouponType.valueOf(couponType));
+			return new Gson().toJson(getFacade().getCouponByType(CouponType.valueOf(couponType)));
 		} catch (DbdaoException e) {
 			e.printStackTrace();
 		} 
-		return Collections.emptySet();
+		return null;
 	}
 	
 }

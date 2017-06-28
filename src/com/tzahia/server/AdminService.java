@@ -17,8 +17,6 @@ import com.tzahia.beans.Company;
 import com.tzahia.beans.CompanyInfo;
 import com.tzahia.beans.Customer;
 import com.tzahia.beans.CustomerInfo;
-import com.tzahia.dbdao.CompanyDBDAO;
-import com.tzahia.dbdao.CustomerDBDAO;
 import com.tzahia.exceptions.DbdaoException;
 import com.tzahia.exceptions.FacadeException;
 import com.tzahia.facade.AdminFacade;
@@ -34,8 +32,7 @@ public class AdminService {
 	private AdminFacade getFacade() {
 
 		AdminFacade admin = null;
-		admin = (AdminFacade) request.getSession(true).getAttribute("facade");
-		// admin = new AdminFacade(new CompanyDBDAO(), new CustomerDBDAO());
+		admin = (AdminFacade) request.getSession(false).getAttribute("facade");
 		return admin;
 	}
 
@@ -118,8 +115,8 @@ public class AdminService {
 
 	@GET
 	@Path("getAllCompanies")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<CompanyInfo> getAllCompanies() {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getAllCompanies() {
 
 		// getting the session and the logged in facade object
 		AdminFacade admin = getFacade();
@@ -137,7 +134,7 @@ public class AdminService {
 				}
 			}
 
-			return companiesInfo;
+			return new Gson().toJson(companiesInfo);
 
 		} catch (DbdaoException e) {
 			e.printStackTrace();
@@ -244,7 +241,7 @@ public class AdminService {
 	@GET
 	@Path("getAllCustomers")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<CustomerInfo> getAllCustomers() {
+	public String getAllCustomers() {
 
 		AdminFacade admin = getFacade();
 
@@ -260,7 +257,7 @@ public class AdminService {
 					CustomerInfo webCustomer = new CustomerInfo(customer);
 					customersInfo.add(webCustomer);
 				}
-				return customersInfo;
+				return new Gson().toJson(customersInfo);
 			}
 
 		} catch (DbdaoException e) {
@@ -274,8 +271,8 @@ public class AdminService {
 
 	@GET
 	@Path("getCustomer")
-	@Produces(MediaType.APPLICATION_JSON)
-	public CustomerInfo getCustomer(@QueryParam("custId") long id) {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getCustomer(@QueryParam("custId") long id) {
 
 		// getting the session and the logged in facade object
 		AdminFacade admin = getFacade();
@@ -284,7 +281,7 @@ public class AdminService {
 			Customer customer = admin.getCustomer(id);
 			if (customer != null) {
 				System.out.println(customer.getCustName() + ", id = " + customer.getId()); // for
-				return new CustomerInfo(customer);
+				return new Gson().toJson(new CustomerInfo(customer));
 			}
 		} catch (DbdaoException e) {
 			e.printStackTrace();
