@@ -8,20 +8,16 @@
 	<!---- define the ADMIN SPA Controller---->
 	<title>Admin</title>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-	<!---- design the COMPANY SPA ---->
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="http://localhost:8080/CouponProject/css/CouponSystemStyle.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
 </head>
 
 
 <body>
 	<script>
+
 		function comapniesFunc() {
-			$("compTbl").show();
+			
+			$("compTbl").attr("href",false);
 			$.getJSON("http://localhost:8080/com.tzahia/rest/admin/getAllCompanies", function (result) {
 
 				$.each(result, function (i, item) {
@@ -42,9 +38,7 @@
 			})
 		}
 
-		$(document).ready(function () {
-			$("compTbl").hide();			
-		});
+		
 	</script>
 
 	<header>
@@ -57,7 +51,7 @@
 	<section>
 
 		<div name="menu" id="mainMenu">
-			<h2>Main Menu</h2>
+			<h2>Companies</h2>
 			<div name="comapniesDiv" id="compDiv">
 
 				<button id="compBtn" class="button" onClick="comapniesFunc()">
@@ -79,17 +73,12 @@
 					<input type="text" name="email"><br>
 					<input type="submit" value="Add company">
 				</form>
-
-
-
-
-
-
 			</div>
-			<h2>
+
+			<h2>Customers</h2>
 				<button id="custBtn" class="button" onClick="customersFunc()">
 							Open Customers</button>
-			</h2>
+			
 			<div name="customersDiv" id="custDiv">This is the customers div
 			</div>
 		</div>
