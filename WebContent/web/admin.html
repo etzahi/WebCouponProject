@@ -5,19 +5,18 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!---- define the ADMIN SPA Controller---->
+	
 	<title>Admin</title>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 
 <body>
 	<script>
-
 		function comapniesFunc() {
-			
-			$("compTbl").attr("href",false);
+
+			$("compTbl").attr("href", false);
 			$.getJSON("http://localhost:8080/com.tzahia/rest/admin/getAllCompanies", function (result) {
 
 				$.each(result, function (i, item) {
@@ -38,7 +37,27 @@
 			})
 		}
 
-		
+		function customersFunc() {
+
+			$.getJSON("http://localhost:8080/com.tzahia/rest/admin/getAllCustomers", function (result) {
+
+				$.each(result, function (i, item) {
+					$("#custTbl").append(
+						"<tr>"
+						+ "<td>" + item.id + "</td>"
+						+ "<td>" + item.custName + "</td>"
+						+ "<td> <button class='button' onClick='removeCustomer(" + item.id + ")'> Delete </button> </td>" +
+						+ "</tr>")
+				})
+			});
+		}
+
+		function removeCustomer(custId) {
+			console.log("removing id: " + custId)
+			$.getJSON("http://localhost:8080/com.tzahia/rest/admin/removeCustomer?custId=" + custId, function (result) {
+				alert(JSON.stringify(result))
+			})
+		}
 	</script>
 
 	<header>
@@ -51,9 +70,9 @@
 	<section>
 
 		<div name="menu" id="mainMenu">
-			<h2>Companies</h2>
-			<div name="comapniesDiv" id="compDiv">
 
+			<div name="comapniesDiv" id="compDiv">
+				<h2>Companies</h2>
 				<button id="compBtn" class="button" onClick="comapniesFunc()">
 							Show Companies
 						</button>
@@ -75,12 +94,29 @@
 				</form>
 			</div>
 
-			<h2>Customers</h2>
+			<div name="customersDiv" id="custDiv">
+				<h2>Customers</h2>
 				<button id="custBtn" class="button" onClick="customersFunc()">
-							Open Customers</button>
-			
-			<div name="customersDiv" id="custDiv">This is the customers div
+							Show Customers
+						</button>
+
+				<table name="customersTable" id="custTbl">
+					<tr>
+						<th>ID</th>
+						<th>Customer Name</th>
+						<th>Remove Customer</th>
+					</tr>
+				</table>
+
+				<br>
+				<h3> Add a new customer</h3>
+				<form id="addCustomerFrm" action="http://localhost:8080/com.tzahia/rest/admin/createCustomer">
+					Customer name: <input type="text" name="name"><br> Customer pass: <input type="text" name="pass"> <br>
+					<input type="submit" value="Add customer">
+				</form>
 			</div>
+
+
 		</div>
 
 	</section>
